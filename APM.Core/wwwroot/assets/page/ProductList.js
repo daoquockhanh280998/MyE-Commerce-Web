@@ -88,8 +88,9 @@ $(document).on('click', '#btnAdd', function () {
 });
 
 $(document).on('click', '#btnEdit', function () {
+    var id = $(this).attr('data-id');
     $('#productManagerModal').modal({ backdrop: 'static', keyboard: false });
-    var apiFind = "http://localhost:6580/api/Product/find" + "?id=" + $(this).attr('data-id');
+    var apiFind = "http://localhost:6580/api/Product/find/" + id;
     $.ajax({
         url: apiFind,
         type: "get",
@@ -134,7 +135,7 @@ $('#btnSaveModalAdd').click(function () {
     });
 });
 $('#btnSaveModalUpdate').click(function () {
-    var id = $('#product_id').val();
+    var id = $('#productManagerModal input[name="product_id"]').val();
     var apiUpdate = "http://localhost:6580/api/Product/update/" + id;
     $.ajax({
         url: apiUpdate,
@@ -160,6 +161,19 @@ $('#btnSaveModalUpdate').click(function () {
 });
 
 
+$('#btnDelete').click(function () {
+    debugger;
+    var id = $('#productManagerModal input[name="product_id"]').val();
+    var apiDelete = "http://localhost:6580/api/Product/delete/" + id;
+    LoadAjaxAuth('POST', apiDelete + '?id=' + id, {
+    }, function (data, status) {
+            if (status === 'success') {
+               iziToast.success({ timeout: 2000, message: 'Xóa thành công !' });
+            $('#confirm-delete').modal('hide');
+            pTable.ajax.reload(null, false);
+        }
+    });
+});
 
 function clearData(modalName) {
     $(modalName)

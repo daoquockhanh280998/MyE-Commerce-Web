@@ -154,7 +154,6 @@ namespace CS.Server.Domain.Service
                 _unitOfWork.GetRepository<Product>().Update(existing);
                 await _unitOfWork.CommitAsync();
             }
-
             return existing;
         }
     }

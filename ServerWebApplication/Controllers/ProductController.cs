@@ -54,6 +54,7 @@ namespace ServerWebApplication.Controllers
             var model = _mapper.Map<Product>(response);
             return Ok(new ApiOkResponse(model));
         }
+
         [HttpPost, Route("update/{id}")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductRequest request , Guid id)
         {
@@ -63,6 +64,24 @@ namespace ServerWebApplication.Controllers
             var model = _mapper.Map<Product>(request);
             var response = await _productService.UpdateAsync(model, id);
             return Ok(new ApiOkResponse(response));
+        }
+        [HttpPost, Route("delete/{id}")]
+        public async Task<IActionResult> DeleteProductById(Guid id)
+        {
+            if (id == null || id == Guid.Empty)
+            {
+                return NotFound(new ApiResponse(false, 404, $"Product is not found with id {id}"));
+            }
+
+            var model = await _productService.GetAsync(id);
+            if (model == null)
+            {
+                return NotFound(new ApiResponse(false, 404, $"Product not found with id {id}"));
+            }
+
+            await _productService.DeleteAsync(id);
+
+            return Ok(new ApiOkResponse(null));
         }
     }
 }
