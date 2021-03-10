@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace AdminApp.EF
+namespace CS.EF.Models
 {
     [Table("users", Schema = "IHM")]
     public class Users
@@ -28,5 +29,8 @@ namespace AdminApp.EF
 
         [Column("full_name")]
         public string FullName { get; set; }
+
+        [Column("role_id")]
+        public Guid RoleId { get; set; }
     }
 }

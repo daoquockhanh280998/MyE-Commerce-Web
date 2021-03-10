@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace AdminApp.EF
+namespace CS.EF.Models
 {
     [Table("product", Schema = "IHM")]
     public class Product
@@ -25,6 +25,5 @@ namespace AdminApp.EF
 
         [Column("create_by")]
         public string CreateBy { set; get; }
-
     }
 }

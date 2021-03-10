@@ -1,7 +1,7 @@
 ﻿using AdminApp.Core.UoW;
-using AdminApp.EF;
 using AutoMapper;
 using CS.Core.Service.Interfaces;
+using CS.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace CS.Server.Domain.Service
 {
     public class ProductService : IProductService
     {
-
         /// <summary>
         /// The unit of work
         /// </summary>
@@ -35,6 +34,7 @@ namespace CS.Server.Domain.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public Product Add(Product entity)
         {
             _unitOfWork.GetRepository<Product>().Add(entity);
@@ -49,12 +49,10 @@ namespace CS.Server.Domain.Service
             return entity;
         }
 
-
         public int Count()
         {
             return _unitOfWork.GetRepository<Product>().Count();
         }
-
 
         public async Task<int> CountAsync()
         {

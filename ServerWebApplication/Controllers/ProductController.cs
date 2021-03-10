@@ -1,8 +1,9 @@
-﻿using AdminApp.EF;
-using AutoMapper;
+﻿using AutoMapper;
 using BackEndAPI.Middleware;
 using CS.Core.Service.Interfaces;
+using CS.EF.Models;
 using CS.VM.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerWebApplication.Middleware;
@@ -15,20 +16,22 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
-
         private readonly IProductService _productService;
+
         /// <summary>
         /// The mapper
         /// </summary>
         private readonly IMapper _mapper;
+
         public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
             _mapper = mapper;
-
         }
+
         [HttpGet, Route("all")]
         public async Task<IActionResult> GetAll()
         {
@@ -47,16 +50,17 @@ namespace ServerWebApplication.Controllers
 
             return Ok(new ApiOkResponse(response));
         }
+
         [HttpGet, Route("find/{id}")]
         public async Task<IActionResult> GetProductById(Guid id)
         {
-            var response = await  _productService.GetAsync(id);
+            var response = await _productService.GetAsync(id);
             var model = _mapper.Map<Product>(response);
             return Ok(new ApiOkResponse(model));
         }
 
         [HttpPost, Route("update/{id}")]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductRequest request , Guid id)
+        public async Task<IActionResult> UpdateProduct([FromBody] ProductRequest request, Guid id)
         {
             if (!ModelState.IsValid || request == null)
                 return BadRequest(new ApiBadRequestResponse(ModelState));
@@ -65,6 +69,7 @@ namespace ServerWebApplication.Controllers
             var response = await _productService.UpdateAsync(model, id);
             return Ok(new ApiOkResponse(response));
         }
+
         [HttpPost, Route("delete/{id}")]
         public async Task<IActionResult> DeleteProductById(Guid id)
         {

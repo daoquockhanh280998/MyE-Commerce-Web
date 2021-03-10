@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace AdminApp.EF
+namespace CS.EF.Models
 {
     [Table("product_image", Schema = "IHM")]
     public class ProductImage
@@ -31,6 +31,5 @@ namespace AdminApp.EF
 
         [Column("file_size")]
         public long FileSize { get; set; }
-
     }
 }

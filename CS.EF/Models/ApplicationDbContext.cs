@@ -1,12 +1,11 @@
-﻿using AdminApp.EF;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CS.EF.Models
 {
-    public class ApplicationDbContext :DbContext
+    public class ApplicationDbContext : DbContext
     {
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
@@ -14,6 +13,7 @@ namespace CS.EF.Models
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
@@ -51,7 +51,7 @@ namespace CS.EF.Models
         {
             base.OnModelCreating(builder);
 
-            //builder.Entity<DepartmentService>().HasKey(x => new { x.DepartmentId, x.ExaminationId, x.ServiceId });
+            builder.Entity<Roles>().HasNoKey();
         }
     }
 }

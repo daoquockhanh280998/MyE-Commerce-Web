@@ -1,5 +1,4 @@
-﻿
-var loadData = function () {
+﻿var loadData = function () {
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -114,24 +113,24 @@ $(document).on('click', '#btnEdit', function () {
 $('#btnSaveModalAdd').click(function () {
     var apiAdd = "http://localhost:6580/api/Product/add";
     $.ajax({
-            url: apiAdd,
-            type: "post",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            headers: "Content-Type",
-            data: JSON.stringify({
-                product_Name: $('#serviceModal input[name="product_name"]').val(),
-                price: $('#serviceModal input[name="price"]').val(),
-                old_Price: $('#serviceModal input[name="old_price"]').val()
-            }),
-            success: function (data) {
-                if (data.success) {
-                    iziToast.success({ timeout: 2000, message: 'Thêm Sản Phẩm Thành Công' });
-                    pTable.ajax.reload();
-                }
-                else
-                    iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
+        url: apiAdd,
+        type: "post",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        headers: "Content-Type",
+        data: JSON.stringify({
+            product_Name: $('#serviceModal input[name="product_name"]').val(),
+            price: $('#serviceModal input[name="price"]').val(),
+            old_Price: $('#serviceModal input[name="old_price"]').val()
+        }),
+        success: function (data) {
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
+                pTable.ajax.reload();
             }
+            else
+                iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
+        }
     });
 });
 $('#btnSaveModalUpdate').click(function () {
@@ -151,7 +150,7 @@ $('#btnSaveModalUpdate').click(function () {
         }),
         success: function (data) {
             if (data.success) {
-                iziToast.success({ timeout: 2000, message: 'Update thành công' });
+                iziToast.success({ timeout: 5000, message: 'Update thành công' });
                 pTable.ajax.reload();
             }
             else
@@ -160,17 +159,23 @@ $('#btnSaveModalUpdate').click(function () {
     });
 });
 
-
-$('#btnDelete').click(function () {
-    debugger;
-    var id = $('#productManagerModal input[name="product_id"]').val();
+$(document).on('click', '#btnDelete', function () {
+    var id = $(this).attr('data-id');
     var apiDelete = "http://localhost:6580/api/Product/delete/" + id;
-    LoadAjaxAuth('POST', apiDelete + '?id=' + id, {
-    }, function (data, status) {
-            if (status === 'success') {
-               iziToast.success({ timeout: 2000, message: 'Xóa thành công !' });
-            $('#confirm-delete').modal('hide');
-            pTable.ajax.reload(null, false);
+    $.ajax({
+        url: apiDelete,
+        type: "Post",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        headers: "Content-Type",
+        success: function (data) {
+            var rs = data.result;
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Xóa Sản phẩm thành công' });
+                pTable.ajax.reload();
+            }
+            else
+                iziToast.error({ timeout: 5000, message: 'Xóa Sản phẩm Thất Bại' });
         }
     });
 });
@@ -207,7 +212,6 @@ function printInfo(data) {
     }, 250);
 }
 function createTemplate(data) {
-
     var transactionDate = new Date(data.time);
     var month = parseInt(transactionDate.getMonth()) + 1;
     var date = transactionDate.getHours() + ':' + transactionDate.getMinutes() + ', Ngày ' + transactionDate.getDate() + ' tháng ' + month + ' năm ' + transactionDate.getFullYear();
@@ -222,7 +226,6 @@ function createTemplate(data) {
 }
 
 function createRechargeTemplate(data) {
-
     return `<body>
                <div style="color:black; width:80mm; padding:0px; margin:auto">
         <div>
@@ -235,7 +238,7 @@ function createRechargeTemplate(data) {
                     </div>
                 </div>
             </div>
-            
+
                 <h3 class="mt-1 title" style="margin-top: 10%;"><b>BIÊN NHẬN NẠP TIỀN</b></h3>
                 <p class="date"style="font-size:12px">${data.date}</p>
             </center>
@@ -304,7 +307,7 @@ function createRechargeTemplate(data) {
             <p class="footer" style="font-size: 10px; margin-top:-20px">Bệnh nhân vui lòng giữ phiếu cho đến khi kết thúc khám tại bệnh viện</p>
             <center><p style="margin-top:-10px">-----------------------------------------------</p></center>
         </div>
-        
+
         <script src="js/js-barcode.js"></script>
         <script src="js/print.js"></script>
     </body>`

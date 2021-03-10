@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace AdminApp.EF
+namespace CS.EF.Models
 {
     [Table("product_category", Schema = "IHM")]
     public class ProductCategory
     {
         [Column("id")]
         public Guid Id { set; get; }
+
         [Column("product_category_name")]
         public string ProductCategoryName { get; set; }
 

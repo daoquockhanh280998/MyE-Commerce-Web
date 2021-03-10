@@ -1,5 +1,5 @@
-﻿using AdminApp.EF;
-using AutoMapper;
+﻿using AutoMapper;
+using CS.EF.Models;
 using CS.VM.Request;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ServerWebApplication.AutoMapper
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="AutoMapper.Profile" />
     public class MappingProfile : Profile
@@ -21,6 +21,7 @@ namespace ServerWebApplication.AutoMapper
         public MappingProfile()
         {
             CreateMap<ProductRequest, Product>();
+            CreateMap<RegisterRequest, Users>();
             //CreateMap<ProductCategoryViewModels, ProductCategory>();
         }
     }

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CS.EF\CS.EF.csproj" />
+    <ProjectReference Include="..\CS.VM\CS.VM.csproj" />
     <ProjectReference Include="..\TEK.Core.UoW\TEK.Core.UoW.csproj" />
   </ItemGroup>
 

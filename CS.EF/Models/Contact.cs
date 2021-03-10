@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace AdminApp.EF
+namespace CS.EF.Models
 {
     [Table("contact", Schema = "IHM")]
     public class Contact
@@ -25,6 +25,5 @@ namespace AdminApp.EF
 
         [Column("status")]
         public int Status { set; get; }
-
     }
 }

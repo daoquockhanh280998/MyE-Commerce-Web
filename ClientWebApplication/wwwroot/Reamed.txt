@@ -1,0 +1,9 @@
+1: Dựng Soure Base
+    tạo base.css , main.css
+    thư mục img , fonts 
+2: Reset css
+   ta phải chủ động css cho các thẻ trong html 1 giá trị mặc định ngay từ đầu và nó có quy chuẩn do ta đặt ra thay vì cho trình duyệt quyết định
+   trang web Reset là : nomalizer css cdn
+3: dựng  css base
+
+4: dựng khung web
