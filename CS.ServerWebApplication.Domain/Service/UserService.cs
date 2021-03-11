@@ -58,13 +58,13 @@ namespace CS.Server.Domain.Service
             {
                 return null;
             }
-            var roles = await _unitOfWork.GetRepository<Roles>().FindAsync(x => x.RoleId == user.RoleId);
+          //  var roles = await _unitOfWork.GetRepository<Roles>().FindAsync(x => x.RoleId == user.RoleId);
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.GivenName,user.FullName),
-                new Claim(ClaimTypes.Role,roles.RoleName)
+               // new Claim(ClaimTypes.Role,roles.RoleName)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

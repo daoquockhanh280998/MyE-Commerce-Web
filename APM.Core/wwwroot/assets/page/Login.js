@@ -1,6 +1,4 @@
 ﻿var loadData = function () {
-    debugger;
-    var c = $.cookie.getItem('_y');
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -17,7 +15,7 @@
             "url": "http://localhost:6580/api/Product/all",
             "type": "GET",
             "contentType": "application/json; charset=utf-8",
-            "headers": { "Authorization": localStorage.getItem('_tk') },
+            "headers": "Content-Type",
             "dataType": "json",
             "dataSrc": function (data) {
                 return data.result;
