@@ -5,7 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\APM.Core.Domain\APM.Core.Domain.csproj" />
+    <ProjectReference Include="..\CS.Core.Service\CS.Core.Service.csproj" />
+    <ProjectReference Include="..\CS.VM\CS.VM.csproj" />
+  </ItemGroup>
 </Project>

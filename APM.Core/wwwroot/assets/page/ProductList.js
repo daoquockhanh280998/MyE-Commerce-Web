@@ -1,6 +1,6 @@
 ﻿var loadData = function () {
     debugger;
-    var c = $.cookie.getItem('_y');
+    var c = 'Bearer ' + localStorage.getItem('token');
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -14,10 +14,10 @@
         scrollCollapse: true,
         ajax:
         {
-            "url": "http://localhost:6580/api/Product/all",
+            "url": "https://localhost:6580/api/Product/all",
             "type": "GET",
             "contentType": "application/json; charset=utf-8",
-            "headers": { "Authorization": localStorage.getItem('_tk') },
+            "headers": { Authorization: localStorage.getItem('token') },
             "dataType": "json",
             "dataSrc": function (data) {
                 return data.result;

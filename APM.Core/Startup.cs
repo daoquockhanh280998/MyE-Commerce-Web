@@ -1,3 +1,6 @@
+using APM.Core.Domain.Service;
+using CS.Core.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,7 +26,18 @@ namespace APM.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.LoginPath = "/Login";
+            //        options.AccessDeniedPath = "/User/Forbidden/";
+            //    });
             services.AddControllersWithViews();
+            services.AddSession(Options =>
+            {
+                Options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin",
@@ -34,6 +48,7 @@ namespace APM.Core
                         .AllowCredentials()
                 );
             });
+            services.AddTransient<IAuthService, AuthService>();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -48,10 +63,8 @@ namespace APM.Core
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             app.UseSession();
             app.UseCookiePolicy();
-          
 
             app.Use(async (context, next) =>
             {
@@ -72,6 +85,7 @@ namespace APM.Core
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

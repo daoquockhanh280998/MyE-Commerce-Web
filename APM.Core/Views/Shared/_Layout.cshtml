@@ -135,12 +135,6 @@
                 </a>
             </li>
 
-
-
-
-
-
-
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -148,7 +142,6 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
         </ul>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
@@ -314,25 +307,21 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <button class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                <button asp-action="Logout" asp-controller="Auth" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Log Out
                                 </button>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     @RenderBody()
-
                 </div>
                 <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
             <!-- Footer -->
@@ -344,10 +333,8 @@
                 </div>
             </footer>
             <!-- End of Footer -->
-
         </div>
         <!-- End of Content Wrapper -->
-
     </div>
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
@@ -369,7 +356,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <form asp-action="Logout" asp-controller="User">
+                    <form asp-action="Logout" asp-controller="Auth">
                         <button class="btn btn-primary">Log Out</button>
                     </form>
                 </div>
@@ -409,5 +396,4 @@
         });
     </script>
 </body>
-
 </html>
