@@ -19,4 +19,8 @@
     <ProjectReference Include="..\CS.Core.Service\CS.Core.Service.csproj" />
     <ProjectReference Include="..\CS.VM\CS.VM.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\bundles\" />
+  </ItemGroup>
 </Project>

@@ -39,6 +39,13 @@ namespace ServerWebApplication.Controllers
             return Ok(new ApiOkResponse(response));
         }
 
+        [HttpPost, Route("all")]
+        public async Task<IActionResult> GetAllProduct([FromBody] DataTableParameters parameters)
+        {
+            var result = await _productService.GetAllAsync(parameters);
+            return Ok(result);
+        }
+
         [HttpPost, Route("add")]
         public async Task<IActionResult> Add([FromBody] ProductRequest request)
         {

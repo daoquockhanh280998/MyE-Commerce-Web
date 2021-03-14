@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace APM.Core.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductController : Controller
     {
         public IActionResult ProductManager()

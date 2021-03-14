@@ -1,51 +1,51 @@
 ﻿var loadData = function () {
-    debugger;
-    var c = 'Bearer ' + localStorage.getItem('token');
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
         serverSide: true,
         filter: true,
-        order: [[3, 'asc']],
-        sort: true,
-        bInfo: true,
+        sort: false,
+        bInfo: false,
         bAutoWidth: true,
         scrollX: true,
         scrollCollapse: true,
         ajax:
         {
-            "url": "https://localhost:6580/api/Product/all",
-            "type": "GET",
-            "contentType": "application/json; charset=utf-8",
-            "headers": { Authorization: localStorage.getItem('token') },
-            "dataType": "json",
-            "dataSrc": function (data) {
-                return data.result;
+            url: "http://localhost:6580/api/Product/all",
+            type: "POST",
+            headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+            contentType: "application/json; charset=utf-8",
+            dataType: "JSON",
+            data: function (d) {
+                return JSON.stringify(d);
             }
         },
         columns:
             [
                 {
+                    "title": "#",
                     "width": "2%",
                     "data": "id",
+                    "bSearchable": false,
+                    "bSortable": false,
                     "sClass": "text-center",
                     "mRender": function (data, type, full, meta) {
                         return (meta.row + 1 + meta.settings._iDisplayStart);
                     }
                 },
-                { "data": "product_id", "sClass": "left", "bSearchable": true, "bSortable": true },
+                { "data": "product_id", "sClass": "left" },
                 { "data": "product_name", "sClass": "left", "bSearchable": true, "bSortable": true },
                 {
                     "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true,
-                    "mRender": function (data, type, full, meta) {
-                        return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    }
+                    //"mRender": function (data, type, full, meta) {
+                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+                    //}
                 },
                 {
                     "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true,
-                    "mRender": function (data, type, full, meta) {
-                        return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    }
+                    //"mRender": function (data, type, full, meta) {
+                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+                    //}
                 },
                 {
                     "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true
@@ -63,11 +63,9 @@
                         if (full.status)
                             return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
                                 <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnActive" title="Hủy kích hoạt" class="btn btn-success btn-xs" data-isActive="' + full.is_active + '" data-id="' + full.id + '"><i class="fa fa-check-circle"></i></button>\
                                 <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
                         return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
                                 <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnActive" title="Kích hoạt" class="btn btn-success btn-xs" data-isActive="' + full.is_active + '" data-id="' + full.id + '" > <i class="fa fa-circle"></i></button > \
                                 <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
                     }
                 }
@@ -76,7 +74,7 @@
         buttons: []
     });
 
-    pTable.one('draw', function () { pTable.columns.adjust(); }).ajax.reload();
+    //pTable.one('draw', function () { pTable.columns.adjust(); }).ajax.reload();
 };
 
 $(document).ready(function () {
@@ -97,7 +95,7 @@ $(document).on('click', '#btnEdit', function () {
         type: "get",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        headers: "Content-Type",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
         success: function (data) {
             var rs = data.result;
             if (data.success) {
@@ -119,7 +117,7 @@ $('#btnSaveModalAdd').click(function () {
         type: "post",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        headers: "Content-Type",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
         data: JSON.stringify({
             product_Name: $('#serviceModal input[name="product_name"]').val(),
             price: $('#serviceModal input[name="price"]').val(),
@@ -143,7 +141,7 @@ $('#btnSaveModalUpdate').click(function () {
         type: "post",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        headers: "Content-Type",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
         data: JSON.stringify({
             product_id: $('#productManagerModal input[name="product_id"]').val(),
             product_Name: $('#productManagerModal input[name="product_name"]').val(),
@@ -169,7 +167,7 @@ $(document).on('click', '#btnDelete', function () {
         type: "Post",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        headers: "Content-Type",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
         success: function (data) {
             var rs = data.result;
             if (data.success) {

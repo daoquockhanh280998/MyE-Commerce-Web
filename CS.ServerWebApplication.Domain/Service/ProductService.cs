@@ -1,9 +1,14 @@
 ﻿using AdminApp.Core.UoW;
 using AutoMapper;
+using CS.Base;
 using CS.Core.Service.Interfaces;
 using CS.EF.Models;
+using CS.VM.ProductViewModel;
+using CS.VM.Request;
+using CS.VM.Rerponse;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -47,6 +52,11 @@ namespace CS.Server.Domain.Service
             _unitOfWork.GetRepository<Product>().Add(entity);
             await _unitOfWork.CommitAsync();
             return entity;
+        }
+
+        public PageResult<Product> GetAllPagging(PaggingRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public int Count()
@@ -113,9 +123,28 @@ namespace CS.Server.Domain.Service
             return _unitOfWork.GetRepository<Product>().GetAll().ToList();
         }
 
-        public async Task<ICollection<Product>> GetAllAsync()
+        public async Task<TableResultJsonResponse<ProductViewModel>> GetAllAsync(DataTableParameters parameters)
         {
-            return await _unitOfWork.GetRepository<Product>().GetAll().ToListAsync();
+            var data = new ConcurrentBag<ProductViewModel>();
+            var result = new TableResultJsonResponse<ProductViewModel>();
+
+            var products = _unitOfWork.GetRepository<Product>().GetAll();
+
+            var totalRecord = products.Count();
+
+            var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
+
+            foreach (var product in filteredProducts)
+            {
+                var productInfo = _mapper.Map<ProductViewModel>(product);
+                data.Add(productInfo);
+            }
+            result.Draw = parameters.Draw;
+            result.RecordsTotal = totalRecord;
+            result.RecordsFiltered = totalRecord;
+            result.Data = data.ToList();
+
+            return result;
         }
 
         public async Task<Product> GetAsync(Guid id)
@@ -153,6 +182,11 @@ namespace CS.Server.Domain.Service
                 await _unitOfWork.CommitAsync();
             }
             return existing;
+        }
+
+        public async Task<ICollection<Product>> GetAllAsync()
+        {
+            return await _unitOfWork.GetRepository<Product>().GetAll().ToListAsync();
         }
     }
 }

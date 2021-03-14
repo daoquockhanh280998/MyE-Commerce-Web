@@ -1,4 +1,5 @@
-﻿using CS.Core.Service.Interfaces;
+﻿using BackEndAPI.Middleware;
+using CS.Core.Service.Interfaces;
 using CS.VM.Request;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -33,47 +34,28 @@ namespace APM.Core.Controllers
         {
             //ViewBag.MessageType = "primary";
             //ViewBag.Message = "Mời Đăng Nhập";
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
-        [HttpPost, Route("Login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        [HttpPost, Route("CookieAuthentication")]
+        public async Task<JsonResult> CreateCookieAuthentication(string token)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
-            var result = await _authService.Authenticate(request);
-
-            if (result == "Username or password is incorrect")
-            {
-                ViewBag.MessageType = "danger";
-                ViewBag.Message = result;
-                return View();
-            }
-            else if (result == "Account has been blocked")
-            {
-                ViewBag.MessageType = "danger";
-                ViewBag.Message = result;
-                return View();
-            }
-
-            var userPrincipal = this.ValidateJwtToken(result);
+            var userPrincipal = this.ValidateJwtToken(token);
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
 
-            HttpContext.Session.SetString("Token", result);
+            HttpContext.Session.SetString("Token", token);
             var t = HttpContext.Session.GetString("Token");
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
 
             //var  principal = await HttpContext.User.Identity.
 
             //data.AddClaim(new Claim(ClaimTypes.UserData, user.Email));
-            return RedirectToAction("Index", "Home");
+            return Json(new ApiOkResponse(token));
         }
 
         [HttpPost, Route("Logout")]

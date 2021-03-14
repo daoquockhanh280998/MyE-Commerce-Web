@@ -27,12 +27,12 @@ namespace APM.Core
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options =>
-            //    {
-            //        options.LoginPath = "/Login";
-            //        options.AccessDeniedPath = "/User/Forbidden/";
-            //    });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login";
+                    options.AccessDeniedPath = "/User/Forbidden/";
+                });
             services.AddControllersWithViews();
             services.AddSession(Options =>
             {

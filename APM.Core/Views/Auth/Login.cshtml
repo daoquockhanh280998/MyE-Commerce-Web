@@ -104,9 +104,6 @@
 
     <script>
         function loginTEM() {
-            debugger;
-            var name = $("#userName").val();
-            var p = $("#password").val();
             event.preventDefault();
             let params = {
                 "user_name": $("#userName").val(),
@@ -119,12 +116,19 @@
                 datatype: JSON,
                 data: JSON.stringify(params),
                 success: function (data) {
-                    console.log(data);
                     if (data.success == true) {
-                        if (data.result) {
-                            localStorage.setItem('token', data.result);
-                            location.href = "@Url.Action("Index", "Home")";
-                        }
+                            $.ajax({
+                                url: "/CookieAuthentication",
+                                method: "post",
+                                datatype: JSON,
+                                data: {
+                                    token: data.result,
+                                },
+                                success: function (data) {
+                                     localStorage.setItem('token', data.result);
+                                     location.href = "@Url.Action("Index", "Home")";
+                                }
+                            })
                     } else if (data.success == false) {
                         swal({
                             text: data.result.errors,

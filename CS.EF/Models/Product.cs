@@ -21,7 +21,7 @@ namespace CS.EF.Models
         public decimal OldPrice { get; set; }
 
         [Column("date_created")]
-        public DateTime DateCreated { set; get; }
+        public DateTime DateCreated { set; get; } = DateTime.Now;
 
         [Column("create_by")]
         public string CreateBy { set; get; }

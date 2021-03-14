@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CS.EF.Models;
+using CS.VM.ProductViewModel;
 using CS.VM.Request;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace ServerWebApplication.AutoMapper
         {
             CreateMap<ProductRequest, Product>();
             CreateMap<RegisterRequest, Users>();
+            CreateMap<Product, ProductViewModel>();
             //CreateMap<ProductCategoryViewModels, ProductCategory>();
         }
     }

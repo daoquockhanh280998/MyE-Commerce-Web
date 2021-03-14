@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace APM.Core.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
