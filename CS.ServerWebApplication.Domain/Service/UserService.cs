@@ -140,7 +140,7 @@ namespace CS.Server.Domain.Service
 
         public Users Get(Guid id)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.GetRepository<Users>().GetById(id);
         }
 
         public ICollection<Users> GetAll()
@@ -148,14 +148,14 @@ namespace CS.Server.Domain.Service
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<Users>> GetAllAsync()
+        public async Task<ICollection<Users>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Users>().GetAll().ToListAsync();
         }
 
-        public Task<Users> GetAsync(Guid id)
+        public async Task<Users> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<Users>().GetAsyncById(id);
         }
 
         public Users Update(Users updated, Guid id)

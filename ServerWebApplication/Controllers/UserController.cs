@@ -16,6 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -38,30 +39,6 @@ namespace ServerWebApplication.Controllers
             return Ok(new ApiOkResponse(response));
         }
 
-        [HttpPost, Route("Register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-        {
-            if (!ModelState.IsValid || request == null)
-                return BadRequest(new ApiBadRequestResponse(ModelState));
-
-            var U = _mapper.Map<Users>(request);
-            var response = await _userService.Register(U);
-
-            return Ok(new ApiOkResponse(response));
-        }
-
-        [HttpPost, Route("Login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Authetate([FromBody] LoginRequest request)
-        {
-            if (!ModelState.IsValid || request == null)
-                return BadRequest(new ApiBadRequestResponse(ModelState));
-
-            var response = await _userService.Authetate(request);
-
-            return Ok(new ApiOkResponse(response));
-        }
 
         [HttpGet, Route("find/{id}")]
         public async Task<IActionResult> GetUsersById(Guid id)
