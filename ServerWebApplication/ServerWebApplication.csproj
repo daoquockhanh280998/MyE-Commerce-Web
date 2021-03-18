@@ -35,4 +35,8 @@
     <ProjectReference Include="..\TEK.Core.UoW\TEK.Core.UoW.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user-content\" />
+  </ItemGroup>
+
 </Project>

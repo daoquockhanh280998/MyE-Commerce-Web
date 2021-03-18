@@ -13,8 +13,12 @@ namespace CS.Core.Service.Interfaces
 {
     public interface IProductService : IService<Product, IRepository<Product>>
     {
+        Task<Product> AddAsync(ProductRequest request);
+
         PageResult<Product> GetAllPagging(PaggingRequest request);
 
         Task<TableResultJsonResponse<ProductViewModel>> GetAllAsync(DataTableParameters parameters);
+
+        //  Task<bool> AddProductImage(ProductRequest request, Product product);
     }
 }

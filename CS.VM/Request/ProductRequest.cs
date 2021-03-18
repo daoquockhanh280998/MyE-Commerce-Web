@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,8 +7,6 @@ namespace CS.VM.Request
 {
     public class ProductRequest
     {
-        public Guid ProductID { get; set; }
-
         public string ProductName { get; set; }
 
         public int Price { get; set; }
@@ -17,5 +16,7 @@ namespace CS.VM.Request
         public DateTime DateCreated { set; get; }
 
         public string CreateBy { set; get; }
+
+        public IFormFile ThumbnailImage { get; set; }
     }
 }

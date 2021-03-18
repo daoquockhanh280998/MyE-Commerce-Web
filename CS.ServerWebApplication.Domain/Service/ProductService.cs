@@ -1,17 +1,21 @@
 ﻿using AdminApp.Core.UoW;
 using AutoMapper;
 using CS.Base;
+using CS.Common.StorageService;
 using CS.Core.Service.Interfaces;
 using CS.EF.Models;
 using CS.VM.ProductViewModel;
 using CS.VM.Request;
 using CS.VM.Rerponse;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,15 +33,18 @@ namespace CS.Server.Domain.Service
         /// </summary>
         private readonly IMapper _mapper;
 
+        private readonly IStorageService _storageService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PatientService" /> class.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         public ProductService(IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper, IStorageService storageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _storageService = storageService;
         }
 
         public Product Add(Product entity)
@@ -45,6 +52,55 @@ namespace CS.Server.Domain.Service
             _unitOfWork.GetRepository<Product>().Add(entity);
             _unitOfWork.Commit();
             return entity;
+        }
+
+        public async Task<Product> AddAsync(ProductRequest request)
+        {
+            var product = new Product()
+            {
+                ProductID = Guid.NewGuid(),
+                ProductName = request.ProductName,
+                Price = request.Price,
+                OldPrice = request.OldPrice,
+                CreateBy = "Admin",
+                DateCreated = DateTime.Now
+            };
+            _unitOfWork.GetRepository<Product>().Add(product);
+
+            var a = await AddProductImage(request, product);
+            await _unitOfWork.CommitAsync();
+            product.ImageId = a.Id;
+            _unitOfWork.GetRepository<Product>().Update(product);
+
+            await _unitOfWork.CommitAsync();
+
+            return product;
+        }
+
+        private async Task<ProductImage> AddProductImage(ProductRequest request, Product product)
+        {
+            var productImage = new ProductImage()
+            {
+                Id = Guid.NewGuid(),
+                ProductId = product.ProductID,
+                Caption = "Thumbnail image",
+                DateCreated = DateTime.Now,
+                FileSize = request.ThumbnailImage.Length,
+                ImagePath = await this.SaveFile(request.ThumbnailImage),
+                IsDefault = true,
+                SortOrder = 1
+            };
+            _unitOfWork.GetRepository<ProductImage>().Add(productImage);
+
+            return productImage;
+        }
+
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return fileName;
         }
 
         public async Task<Product> AddAsync(Product entity)
@@ -129,6 +185,7 @@ namespace CS.Server.Domain.Service
             var result = new TableResultJsonResponse<ProductViewModel>();
 
             var products = _unitOfWork.GetRepository<Product>().GetAll();
+            var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
 
             var totalRecord = products.Count();
 
@@ -136,7 +193,13 @@ namespace CS.Server.Domain.Service
 
             foreach (var product in filteredProducts)
             {
-                var productInfo = _mapper.Map<ProductViewModel>(product);
+                //var productInfo = _mapper.Map<ProductViewModel>(product);
+                var productInfo = new ProductViewModel()
+                {
+                    ProductID = product.ProductID,
+                    ProductName = product.ProductName,
+                    //ImagePath = productsImgage.
+                };
                 data.Add(productInfo);
             }
             result.Draw = parameters.Draw;

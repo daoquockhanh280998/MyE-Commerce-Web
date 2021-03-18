@@ -1,5 +1,6 @@
 using AdminApp.Core.UoW.DependencyInjection;
 using AutoMapper;
+using CS.Common.StorageService;
 using CS.Core.Service.Interfaces;
 using CS.EF.Models;
 using CS.Server.Domain.Service;
@@ -64,6 +65,7 @@ namespace ServerWebApplication
             // Services
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
             //services.AddTransient<IProductCategoryService, ProductCategoryService>();
             // Automapper
             var mappingConfig = new MapperConfiguration(mc =>

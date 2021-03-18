@@ -54,6 +54,8 @@ namespace ServerWebApplication.Models
             base.OnModelCreating(builder);
 
             builder.Entity<Roles>().HasNoKey();
+            builder.Entity<ProductImage>().HasKey(x => x.Id);
+            builder.Entity<Product>().HasKey(x => x.ProductID);
         }
     }
 }

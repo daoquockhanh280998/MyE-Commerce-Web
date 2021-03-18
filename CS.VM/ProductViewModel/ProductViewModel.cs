@@ -9,6 +9,7 @@ namespace CS.VM.ProductViewModel
         public Guid ProductID { get; set; }
 
         public string ProductName { get; set; }
+        public string ImagePath { get; set; }
 
         public int Price { get; set; }
 

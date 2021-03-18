@@ -16,7 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -47,15 +47,14 @@ namespace ServerWebApplication.Controllers
         }
 
         [HttpPost, Route("add")]
-        public async Task<IActionResult> Add([FromBody] ProductRequest request)
+        public async Task<IActionResult> Add([FromForm] ProductRequest request)
         {
             if (!ModelState.IsValid || request == null)
                 return BadRequest(new ApiBadRequestResponse(ModelState));
 
-            var model = _mapper.Map<Product>(request);
-            var response = await _productService.AddAsync(model);
+            var result = await _productService.AddAsync(request);
 
-            return Ok(new ApiOkResponse(response));
+            return Ok(new ApiOkResponse(result));
         }
 
         [HttpGet, Route("find/{id}")]
