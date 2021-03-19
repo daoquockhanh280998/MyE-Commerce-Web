@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -36,6 +39,7 @@
                             <th>#</th>
                             <th>ID</th>
                             <th>Tên Sản Phẩm</th>
+                            <th>Hình Ảnh</th>
                             <th>Giá</th>
                             <th>Giá Cũ</th>
                             <th>Ngày Tạo</th>
@@ -156,6 +160,16 @@
     </div>
 
     @section js{
+        <script>
+            APP_CONFIG = {
+                @*BaseUrl: decodeURIComponent('@AppSetting.GetString("BaseUrl")'),*@
+                //GetAll: decodeURIComponent("http://192.168.1.24:8082/api/Product/all"),
+                //Add: decodeURIComponent("http://192.168.1.24:8082/api/Product/add"),
+                BaseAddress = '@Configuration["BaseAddress"]',
+                pageLength: 10
+            }
+        </script>
+
         <!--   Core JS Files   -->
         <script src="~/vendor/jquery/jquery.min.js"></script>
         <script src="~/vendor/jquery-cookie/jquery.cookie.js"></script>
@@ -194,14 +208,5 @@
         <script src="../assets/demo/demo.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-
-        <script>
-        APP_CONFIG = {
-            @*BaseUrl: decodeURIComponent('@AppSetting.GetString("BaseUrl")'),*@
-            //GetAll: decodeURIComponent("http://192.168.1.24:8082/api/Product/all"),
-            //Add: decodeURIComponent("http://192.168.1.24:8082/api/Product/add"),
-            pageLength: 10
-        }
-        </script>
         <script src="~/assets/page/ProductList.js"></script>
     }

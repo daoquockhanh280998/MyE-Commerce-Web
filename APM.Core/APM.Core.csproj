@@ -22,5 +22,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\bundles\" />
+    <Folder Include="wwwroot\user-content\" />
   </ItemGroup>
 </Project>

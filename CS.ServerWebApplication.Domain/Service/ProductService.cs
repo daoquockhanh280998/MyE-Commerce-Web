@@ -67,10 +67,14 @@ namespace CS.Server.Domain.Service
             };
             _unitOfWork.GetRepository<Product>().Add(product);
 
-            var a = await AddProductImage(request, product);
-            await _unitOfWork.CommitAsync();
-            product.ImageId = a.Id;
-            _unitOfWork.GetRepository<Product>().Update(product);
+            if (request.ThumbnailImage != null)
+            {
+                var a = await AddProductImage(request, product);
+                await _unitOfWork.CommitAsync();
+                product.ImagePath = a.ImagePath;
+                _unitOfWork.GetRepository<Product>().Update(product);
+            }
+         
 
             await _unitOfWork.CommitAsync();
 
@@ -185,21 +189,19 @@ namespace CS.Server.Domain.Service
             var result = new TableResultJsonResponse<ProductViewModel>();
 
             var products = _unitOfWork.GetRepository<Product>().GetAll();
-            var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
-
             var totalRecord = products.Count();
 
             var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
-
+            var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
             foreach (var product in filteredProducts)
             {
-                //var productInfo = _mapper.Map<ProductViewModel>(product);
-                var productInfo = new ProductViewModel()
-                {
-                    ProductID = product.ProductID,
-                    ProductName = product.ProductName,
-                    //ImagePath = productsImgage.
-                };
+                var productInfo = _mapper.Map<ProductViewModel>(product);
+                //var productInfo = new ProductViewModel()
+                //{
+                //    ProductID = product.ProductID,
+                //    ProductName = product.ProductName,
+                //    //ImagePath = productsImgage.
+                //};
                 data.Add(productInfo);
             }
             result.Draw = parameters.Draw;

@@ -14,8 +14,8 @@ namespace CS.EF.Models
         [Column("product_name")]
         public string ProductName { get; set; }
 
-        [Column("image_id")]
-        public Guid ImageId { get; set; }
+        [Column("image_path")]
+        public string ImagePath { get; set; }
 
         [Column("price")]
         public int Price { get; set; }

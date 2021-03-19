@@ -36,6 +36,12 @@
                 { "data": "product_id", "sClass": "left" },
                 { "data": "product_name", "sClass": "left", "bSearchable": true, "bSortable": true },
                 {
+                    "data": "image_path", "sClass": "left", "bSearchable": false, "bSortable": false,
+                    "mRender": function (data, type, full, meta) {
+                        return '<img src="http://localhost:6580/user-content/' + data + '" />'
+                    }
+                },
+                {
                     "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true,
                     //"mRender": function (data, type, full, meta) {
                     //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
