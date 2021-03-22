@@ -33,38 +33,39 @@
                         return (meta.row + 1 + meta.settings._iDisplayStart);
                     }
                 },
-                { "data": "product_id", "sClass": "left" },
-                { "data": "product_name", "sClass": "left", "bSearchable": true, "bSortable": true },
+                { "data": "product_id", "sClass": "left", "width": "150", "height": "150" },
+                { "data": "product_name", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
                 {
                     "data": "image_path", "sClass": "left", "bSearchable": false, "bSortable": false,
                     "mRender": function (data, type, full, meta) {
-                        return '<img src="http://localhost:6580/user-content/' + data + '" />'
+                        return '<img src="http://localhost:6580' + data + '"height="150" width="250"  />';
                     }
                 },
                 {
-                    "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true,
+                    "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
                     //"mRender": function (data, type, full, meta) {
                     //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
                     //}
                 },
                 {
-                    "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true,
+                    "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
                     //"mRender": function (data, type, full, meta) {
                     //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
                     //}
                 },
                 {
-                    "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true
+                    "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "150"
                     // "mRender": function (data, type, full, meta) {
                     //    return moment(data).format('DD-MM-YYYY HH:mm:ss');
                     //}
                 },
-                { "data": "create_by", "sClass": "left", "bSearchable": true, "bSortable": true },
+                { "data": "create_by", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150" },
                 {
                     "data": "id",
                     "bSearchable": false,
                     "bSortable": false,
                     "sClass": "text-center",
+                    "width": "100", "height": "150" ,
                     "mRender": function (data, type, full, meta) {
                         if (full.status)
                             return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\

@@ -37,14 +37,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>ID</th>
-                            <th>Tên Sản Phẩm</th>
+                            <th style="width:150px;height:10px;">ID</th>
+                            <th style="width:200px;height:10px;">Tên Sản Phẩm</th>
                             <th>Hình Ảnh</th>
-                            <th>Giá</th>
-                            <th>Giá Cũ</th>
-                            <th>Ngày Tạo</th>
-                            <th>Người Tạo</th>
-                            <th>Chức Năng</th>
+                            <th style="width:100px;height:10px;">Giá</th>
+                            <th style="width:100px;height:10px;">Giá Cũ</th>
+                            <th style="width:100px;height:10px;">Ngày Tạo</th>
+                            <th style="width:100px;height:10px;">Người Tạo</th>
+                            <th style="width:100px;height:10px;">Chức Năng</th>
                         </tr>
                     </thead>
                 </table>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <form id="validationForm" class="needs-validation" novalidate>
+        <form id="validationForm" class="needs-validation"  novalidate>
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -92,7 +92,12 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Thêm Ảnh</label>
+                                    <input id="files" name="files" type="file" size="1" />
+                                </div>
+                            </div>
                             <div class="col-12">
                                 <label class="checkbox-inline"><input type="checkbox" name="is_Active" checked>  Hoạt động</label>
                             </div>
@@ -208,5 +213,5 @@
         <script src="../assets/demo/demo.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-        <script src="~/assets/page/ProductList.js"></script>
+        <script src="~/assets/page/ProductList_Manager.js"></script>
     }

@@ -34,6 +34,8 @@ namespace CS.Server.Domain.Service
         private readonly IMapper _mapper;
 
         private readonly IStorageService _storageService;
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PatientService" /> class.
@@ -74,7 +76,7 @@ namespace CS.Server.Domain.Service
                 product.ImagePath = a.ImagePath;
                 _unitOfWork.GetRepository<Product>().Update(product);
             }
-         
+
 
             await _unitOfWork.CommitAsync();
 
@@ -104,7 +106,7 @@ namespace CS.Server.Domain.Service
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
         }
 
         public async Task<Product> AddAsync(Product entity)

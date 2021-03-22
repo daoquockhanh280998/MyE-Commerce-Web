@@ -364,6 +364,12 @@
         </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" role="dialog" id="loading-modal">
+        <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+            <img src="~/assets/img/loading.svg" />
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -392,6 +398,14 @@
                     $("#page-top").removeClass("sidebar-toggled");
                     $("#accordionSidebar").removeClass("toggled");
                 }
+            });
+
+            $(document).ajaxStart(function () {
+                $('#loading-modal').modal('show');
+            }).ajaxStop(function () {
+                setTimeout(function () {
+                    $('#loading-modal').modal('hide');
+                }, 2000);
             });
         });
     </script>

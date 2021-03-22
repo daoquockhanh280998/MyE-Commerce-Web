@@ -91,6 +91,12 @@
         </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" role="dialog" id="loading-modal">
+        <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+            <img src="~/assets/img/loading.svg" />
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/jquery-cookie/jquery.cookie.js"></script>
@@ -110,7 +116,7 @@
                 "Password": $("#password").val(),
             };
             $.ajax({
-                url: 'http://localhost:6580/api/Auth/Login',
+                url: 'http://192.168.1.38:8082/api/Auth/Login',
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 datatype: JSON,
@@ -126,7 +132,7 @@
                                 },
                                 success: function (data) {
                                     localStorage.setItem('token', data.result);
-                                     location.href = "@Url.Action("Index", "Home")";
+                                    location.href = "@Url.Action("Index", "Home")";
                                 }
                             })
                     } else if (data.success == false) {
@@ -136,7 +142,13 @@
                         });
                     }
                 },
-                error: function (data) { }
+                error: function (data) { },
+                beforeSend: function () {
+                    $('#loading-modal').modal('show');
+                },
+                complete: function () {
+                    $('#loading-modal').modal('hide');
+                }
             });
         }
     </script>

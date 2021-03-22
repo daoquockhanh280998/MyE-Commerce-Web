@@ -159,7 +159,7 @@ namespace ServerWebApplication
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-
+            app.UseStaticFiles();
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
