@@ -1,4 +1,5 @@
 ﻿var loadData = function () {
+    console.log(APP_CONFIG.BaseAddress);
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -11,7 +12,7 @@
         scrollCollapse: true,
         ajax:
         {
-            url: "http://localhost:6580/api/Product/all",
+            url: APP_CONFIG.GetAll,
             type: "POST",
             headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
             contentType: "application/json; charset=utf-8",
@@ -96,7 +97,7 @@ $(document).on('click', '#btnAdd', function () {
 $(document).on('click', '#btnEdit', function () {
     var id = $(this).attr('data-id');
     $('#productManagerModal').modal({ backdrop: 'static', keyboard: false });
-    var apiFind = "http://localhost:6580/api/Product/find/" + id;
+    var apiFind = APP_CONFIG.FindById + id;
     $.ajax({
         url: apiFind,
         type: "get",
@@ -118,8 +119,7 @@ $(document).on('click', '#btnEdit', function () {
 });
 
 $('#btnSaveModalAdd').click(function () {
-    debugger
-    var apiAdd = "http://localhost:6580/api/Product/add";
+    var apiAdd = APP_CONFIG.Add;
     var input = document.getElementById("files");
     var files = input.files;
     var formData = new FormData();
@@ -152,7 +152,7 @@ $('#btnSaveModalAdd').click(function () {
 
 $('#btnSaveModalUpdate').click(function () {
     var id = $('#productManagerModal input[name="product_id"]').val();
-    var apiUpdate = "http://localhost:6580/api/Product/update/" + id;
+    var apiUpdate = APP_CONFIG.Update + id;
     $.ajax({
         url: apiUpdate,
         type: "post",
@@ -178,7 +178,7 @@ $('#btnSaveModalUpdate').click(function () {
 
 $(document).on('click', '#btnDelete', function () {
     var id = $(this).attr('data-id');
-    var apiDelete = "http://localhost:6580/api/Product/delete/" + id;
+    var apiDelete = APP_CONFIG.Delete + id;
     $.ajax({
         url: apiDelete,
         type: "Post",

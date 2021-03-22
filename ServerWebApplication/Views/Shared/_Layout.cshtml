@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - ServerWebApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @using Microsoft.Extensions.Configuration
+    @inject IConfiguration Configuration
 </head>
 <body>
     <header>
