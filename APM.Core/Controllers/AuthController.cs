@@ -49,7 +49,6 @@ namespace APM.Core.Controllers
             };
 
             HttpContext.Session.SetString("Token", token);
-            var t = HttpContext.Session.GetString("Token");
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
 
             //var  principal = await HttpContext.User.Identity.

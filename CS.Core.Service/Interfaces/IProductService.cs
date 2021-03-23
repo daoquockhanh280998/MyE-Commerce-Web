@@ -18,6 +18,7 @@ namespace CS.Core.Service.Interfaces
         PageResult<Product> GetAllPagging(PaggingRequest request);
 
         Task<TableResultJsonResponse<ProductViewModel>> GetAllAsync(DataTableParameters parameters);
+      //  Task<TableResultJsonResponse<ProductViewModel>> GetProductByKeyWord(DataTableParameters parameters);
 
         //  Task<bool> AddProductImage(ProductRequest request, Product product);
     }

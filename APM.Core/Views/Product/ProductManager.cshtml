@@ -163,15 +163,22 @@
             </div>
         </form>
     </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="loading-modal">
+        <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+            <img src="~/assets/img/loading.svg" />
+        </div>
+    </div>
 
     @section js{
         <script>
             APP_CONFIG = {
+                BaseURL: decodeURIComponent('@Configuration["BaseAddress"]'),
                 GetAll: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/all",
                 Add: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/add",
                 Update: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/update/",
                 Delete: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/delete/",
                 FindById: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/find/",
+                Search: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/search",
                 pageLength: 10
             }
         </script>
@@ -197,6 +204,7 @@
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
         @*<script src="~/assets/bundles/datatables/plugins/bootstrap/dataTables.bootstrap4.min.js"></script>
             <script src="~/assets/data/table-data.js"></script>*@
+        <link href="~/assets/fontawesome-free-5.15.2-web/css/fontawesome.min.css" rel="stylesheet" />
 
         <script src="https://unpkg.com/default-passive-events"></script>
         <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -214,5 +222,6 @@
         <script src="../assets/demo/demo.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://momentjs.com/downloads/moment.js"></script>
         <script src="~/assets/page/ProductList_Manager.js"></script>
     }

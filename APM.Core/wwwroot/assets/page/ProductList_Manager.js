@@ -1,5 +1,4 @@
 ﻿var loadData = function () {
-    console.log(APP_CONFIG.BaseAddress);
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -17,6 +16,12 @@
             headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
+            beforeSend: function () {
+                $('#loading-modal').modal('show');
+            },
+            complete: function () {
+                $('#loading-modal').modal('hide');
+            },
             data: function (d) {
                 return JSON.stringify(d);
             }
@@ -39,26 +44,26 @@
                 {
                     "data": "image_path", "sClass": "left", "bSearchable": false, "bSortable": false,
                     "mRender": function (data, type, full, meta) {
-                        return '<img src="http://localhost:6580' + data + '"height="150" width="250"  />';
+                        return '<img src="' + APP_CONFIG.BaseURL +  data + '"height="150" width="250"  />';
                     }
                 },
                 {
-                    "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
-                    //"mRender": function (data, type, full, meta) {
-                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    //}
+                    "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
+                    "mRender": function (data, type, full, meta) {
+                        return data.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                    }
                 },
                 {
-                    "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
-                    //"mRender": function (data, type, full, meta) {
-                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    //}
+                    "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
+                   "mRender": function (data, type, full, meta) {
+                        return data.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                    }
                 },
                 {
-                    "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
-                    // "mRender": function (data, type, full, meta) {
-                    //    return moment(data).format('DD-MM-YYYY HH:mm:ss');
-                    //}
+                    "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
+                     "mRender": function (data, type, full, meta) {
+                        return moment(data).format('DD-MM-YYYY');
+                    }
                 },
                 { "data": "create_by", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150" },
                 {
@@ -81,9 +86,8 @@
             ],
         buttons: []
     });
-
-    //pTable.one('draw', function () { pTable.columns.adjust(); }).ajax.reload();
 };
+
 
 $(document).ready(function () {
     loadData();

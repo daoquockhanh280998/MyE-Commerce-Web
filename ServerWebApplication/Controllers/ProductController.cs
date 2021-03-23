@@ -95,5 +95,11 @@ namespace ServerWebApplication.Controllers
             return Ok(new ApiOkResponse(null));
         }
 
+        //[HttpPost, Route("search")]
+        //public async Task<IActionResult> SearchProduct(string keyword, DataTableParameters parameters)
+        //{
+        //    var result = await _productService.GetProductByKeyWord(keyword, parameters);
+        //    return Ok(result);
+        //}
     }
 }
