@@ -71,27 +71,31 @@
                     "bSearchable": false,
                     "bSortable": false,
                     "sClass": "text-center",
-                    "width": "100", "height": "150",
+                    "width": "200", "height": "150",
                     "mRender": function (data, type, full, meta) {
                         if (full.status)
-                            return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
-                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
-                        return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
-                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
+                            return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fas fa-edit"></i></button>\
+                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fas fa-trash-alt"></i></button>\
+                                <button id="btnChangeStatus"  title="Update Status" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fas fa-undo-alt"></i></button>'
+                        return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fas fa-edit"></i></button>\
+                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fas fa-trash-alt"></i></button>\
+                                <button id="btnChangeStatus" title="Update Status" class="btn btn-danger btn-xs" data-id="' + full.product_id + '"><i class="fas fa-undo-alt"></i></button>'
                     }
                 }
 
             ],
         buttons: []
     });
+    //$('body').on('search.dt', '.dataTables_filter input', function () {
+    //    setTimeout(function () { pTable.search($('.dataTables_filter input').val()).draw(); }, 10000);
+    //});
 };
 
 
 $(document).ready(function () {
     loadData();
 });
+
 
 $(document).on('click', '#btnAdd', function () {
     $('#serviceModal').modal({ backdrop: 'static', keyboard: false });
@@ -180,9 +184,31 @@ $('#btnSaveModalUpdate').click(function () {
     });
 });
 
+$(document).on('click', '#btnChangeStatus', function () {
+    $.ajax({
+        url: APP_CONFIG.ChangeStatus,
+        type: "Post",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+        data: JSON.stringify({
+            id: $(this).attr('data-id'),
+        }),
+        success: function (data) {
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Update Trạng Thái thành công' }); 
+                pTable.ajax.reload();
+            }
+            else
+                iziToast.error({ timeout: 5000, message: 'Update Trạng Thái Thất Bại' });
+        }
+    });
+});
+
 $(document).on('click', '#btnDelete', function () {
     var id = $(this).attr('data-id');
     var apiDelete = APP_CONFIG.Delete + id;
+
     $.ajax({
         url: apiDelete,
         type: "Post",

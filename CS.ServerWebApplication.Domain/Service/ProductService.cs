@@ -65,7 +65,8 @@ namespace CS.Server.Domain.Service
                 Price = request.Price,
                 OldPrice = request.OldPrice,
                 CreateBy = "Admin",
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.Now,
+                Status = true
             };
             _unitOfWork.GetRepository<Product>().Add(product);
 
@@ -189,60 +190,35 @@ namespace CS.Server.Domain.Service
         {
             var data = new ConcurrentBag<ProductViewModel>();
             var result = new TableResultJsonResponse<ProductViewModel>();
-          
+            var products = _unitOfWork.GetRepository<Product>().GetAll();
             if (!string.IsNullOrEmpty(parameters.Search.Value))
             {
-                var products = _unitOfWork.GetRepository<Product>().GetAll().Where(x=>x.ProductName == parameters.Search.Value);
-                var totalRecord = products.Count();
-
-                var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
-                // var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
-                foreach (var product in filteredProducts)
-                {
-                    var productInfo = _mapper.Map<ProductViewModel>(product);
-                    //var productInfo = new ProductViewModel()
-                    //{
-                    //    ProductID = product.ProductID,
-                    //    ProductName = product.ProductName,
-                    //    //ImagePath = productsImgage.
-                    //};
-                    data.Add(productInfo);
-                }
-                result.Draw = parameters.Draw;
-                result.RecordsTotal = totalRecord;
-                result.RecordsFiltered = totalRecord;
-                result.Data = data.ToList();
-
-                return result;
+                 products = _unitOfWork.GetRepository<Product>().GetAll().Where(x=>x.ProductName == parameters.Search.Value);
             }
             else
             {
-
-                var products = _unitOfWork.GetRepository<Product>().GetAll();
-                var totalRecord = products.Count();
-
-                var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
-                // var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
-                foreach (var product in filteredProducts)
-                {
-                    var productInfo = _mapper.Map<ProductViewModel>(product);
-                    //var productInfo = new ProductViewModel()
-                    //{
-                    //    ProductID = product.ProductID,
-                    //    ProductName = product.ProductName,
-                    //    //ImagePath = productsImgage.
-                    //};
-                    data.Add(productInfo);
-                }
-                result.Draw = parameters.Draw;
-                result.RecordsTotal = totalRecord;
-                result.RecordsFiltered = totalRecord;
-                result.Data = data.ToList();
-
-                return result;
+                 products = _unitOfWork.GetRepository<Product>().GetAll();
             }
-            
-          
+            var totalRecord = products.Count();
+            var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
+            // var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
+            foreach (var product in filteredProducts)
+            {
+                var productInfo = _mapper.Map<ProductViewModel>(product);
+                //var productInfo = new ProductViewModel()
+                //{
+                //    ProductID = product.ProductID,
+                //    ProductName = product.ProductName,
+                //    //ImagePath = productsImgage.
+                //};
+                data.Add(productInfo);
+            }
+            result.Draw = parameters.Draw;
+            result.RecordsTotal = totalRecord;
+            result.RecordsFiltered = totalRecord;
+            result.Data = data.ToList();
+
+            return result;
         }
 
         public async Task<Product> GetAsync(Guid id)
@@ -287,33 +263,31 @@ namespace CS.Server.Domain.Service
             return await _unitOfWork.GetRepository<Product>().GetAll().ToListAsync();
         }
 
-        //public async Task<TableResultJsonResponse<ProductViewModel>> GetProductByKeyWord(DataTableParameters parameters)
-        //{
-        //      var data = new ConcurrentBag<ProductViewModel>();
-        //    var result = new TableResultJsonResponse<ProductViewModel>();
+        public async Task<Product> ChangeStatus(Guid id)
+        {
+            var product = await _unitOfWork.GetRepository<Product>().GetAsyncById(id);
+            if (product != null)
+            {
+                product.Status = !product.Status;
+                _unitOfWork.GetRepository<Product>().Update(product);
+                await _unitOfWork.CommitAsync();
+            }
 
-        //    var products = _unitOfWork.GetRepository<Product>().GetAll().Where(x=>x.ProductName == keyword);
-        //    var totalRecord = products.Count();
+            return product;
+        }
 
-        //    var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
-        //    var productsImgage = _unitOfWork.GetRepository<ProductImage>().GetAll();
-        //    foreach (var product in filteredProducts)
-        //    {
-        //        var productInfo = _mapper.Map<ProductViewModel>(product);
-        //        //var productInfo = new ProductViewModel()
-        //        //{
-        //        //    ProductID = product.ProductID,
-        //        //    ProductName = product.ProductName,
-        //        //    //ImagePath = productsImgage.
-        //        //};
-        //        data.Add(productInfo);
-        //    }
-        //    result.Draw = parameters.Draw;
-        //    result.RecordsTotal = totalRecord;
-        //    result.RecordsFiltered = totalRecord;
-        //    result.Data = data.ToList();
+        public async Task<ICollection<ProductViewModel>> Export()
+        {
+            var productViewModels = new List<ProductViewModel>();
+            var products = await _unitOfWork.GetRepository<Product>().GetAll().ToListAsync();
 
-        //    return result;
-        //}
+            foreach (var product in products)
+            {
+                var productInfo = _mapper.Map<ProductViewModel>(product);
+                productViewModels.Add(productInfo);
+            }
+
+            return productViewModels;
+        }
     }
 }

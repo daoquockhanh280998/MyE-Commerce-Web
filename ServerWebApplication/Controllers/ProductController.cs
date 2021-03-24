@@ -20,15 +20,16 @@ namespace ServerWebApplication.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-
+        private readonly IExportExcelService _exportExcelService;
         /// <summary>
         /// The mapper
         /// </summary>
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public ProductController(IProductService productService, IMapper mapper, IExportExcelService exportExcelService)
         {
             _productService = productService;
+            _exportExcelService = exportExcelService;
             _mapper = mapper;
         }
 
@@ -95,11 +96,22 @@ namespace ServerWebApplication.Controllers
             return Ok(new ApiOkResponse(null));
         }
 
-        //[HttpPost, Route("search")]
-        //public async Task<IActionResult> SearchProduct(string keyword, DataTableParameters parameters)
-        //{
-        //    var result = await _productService.GetProductByKeyWord(keyword, parameters);
-        //    return Ok(result);
-        //}
+        [HttpPost, Route("change-status")]
+        public async Task<IActionResult> ChangeActive([FromBody] ChangeStatusRequest request)
+        {
+            Product response;
+            if (!ModelState.IsValid)
+                return BadRequest(new ApiBadRequestResponse(ModelState));
+            response = await _productService.ChangeStatus(request.Id);
+            return Ok(new ApiOkResponse(response));
+        }
+
+        [HttpPost, Route("export")]
+        public async Task<IActionResult> export()
+        {
+            var result = await _productService.Export();
+            var export = _exportExcelService.ExportProduct(result);
+            return Ok(new ApiOkResponse(export));
+        }
     }
 }

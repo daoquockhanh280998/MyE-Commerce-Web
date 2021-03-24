@@ -28,5 +28,8 @@ namespace CS.EF.Models
 
         [Column("create_by")]
         public string CreateBy { set; get; }
+
+        [Column("status")]
+        public bool Status { set; get; }
     }
 }

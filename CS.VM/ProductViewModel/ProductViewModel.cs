@@ -15,8 +15,9 @@ namespace CS.VM.ProductViewModel
 
         public decimal OldPrice { get; set; }
 
-        public DateTime DateCreated { set; get; }
+        public DateTime? DateCreated { set; get; }
 
         public string CreateBy { set; get; }
+        public bool Status { set; get; }
     }
 }
