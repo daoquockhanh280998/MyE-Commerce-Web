@@ -44,7 +44,12 @@
                 {
                     "data": "image_path", "sClass": "left", "bSearchable": false, "bSortable": false,
                     "mRender": function (data, type, full, meta) {
-                        return '<img src="' + APP_CONFIG.BaseURL +  data + '"height="150" width="250"  />';
+                        if (data == null) {
+                            return '<img src="/assets/img/no-image.png" height="150" width="250"  />';
+                        }
+                        else {
+                            return '<img src="' + APP_CONFIG.BaseURL + data + '"height="150" width="250"  />';
+                        }
                     }
                 },
                 {
@@ -223,6 +228,34 @@ $(document).on('click', '#btnDelete', function () {
             }
             else
                 iziToast.error({ timeout: 5000, message: 'Xóa Sản phẩm Thất Bại' });
+        }
+    });
+});
+
+$(document).on('click', '#btnImport', function () {
+    var input = document.getElementById("fileImport");
+    var files = input.files;
+    var formData = new FormData();
+
+    for (var i = 0; i != files.length; i++) {
+        formData.append("file", files[i]);
+    }
+
+    $.ajax({
+        url: APP_CONFIG.Import,
+        type: "post",
+        processData: false,
+        contentType: false,
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+        data: formData,
+        success: function (data) {
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
+                pTable.ajax.reload();
+
+            }
+            else
+                iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
         }
     });
 });

@@ -1,4 +1,5 @@
 ﻿var loadData = function () {
+    debugger;
     pTable = $('#MainTable').DataTable({
         pageLength: 10,
         processing: true,
@@ -11,11 +12,17 @@
         scrollCollapse: true,
         ajax:
         {
-            url: "http://localhost:6580/api/Product/all",
+            url: APP_CONFIG.GetAll,
             type: "POST",
             headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
+            beforeSend: function () {
+                $('#loading-modal').modal('show');
+            },
+            complete: function () {
+                $('#loading-modal').modal('hide');
+            },
             data: function (d) {
                 return JSON.stringify(d);
             }
@@ -33,60 +40,60 @@
                         return (meta.row + 1 + meta.settings._iDisplayStart);
                     }
                 },
-                { "data": "product_id", "sClass": "left", "width": "150", "height": "150" },
-                { "data": "product_name", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
+                { "data": "id", "sClass": "left", "width": "150", "height": "150" },
+                { "data": "user_name", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
+                { "data": "full_name", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
                 {
                     "data": "image_path", "sClass": "left", "bSearchable": false, "bSortable": false,
                     "mRender": function (data, type, full, meta) {
-                        return '<img src="http://localhost:6580' + data + '"height="150" width="250"  />';
+                        if (data == null) {
+                            return '<img src="/assets/img/no-image.png" height="150" width="250"  />';
+                        }
+                        else {
+                            return '<img src="' + APP_CONFIG.BaseURL + data + '"height="150" width="250"  />';
+                        }
                     }
                 },
+                { "data": "phone_number", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
+                { "data": "email", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "200" },
                 {
-                    "data": "price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
-                    //"mRender": function (data, type, full, meta) {
-                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    //}
+                    "data": "dob", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
+                    "mRender": function (data, type, full, meta) {
+                        return moment(data).format('DD-MM-YYYY');
+                    }
                 },
-                {
-                    "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150"
-                    //"mRender": function (data, type, full, meta) {
-                    //    return data.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    //}
-                },
-                {
-                    "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "200", "height": "150"
-                    // "mRender": function (data, type, full, meta) {
-                    //    return moment(data).format('DD-MM-YYYY HH:mm:ss');
-                    //}
-                },
-                { "data": "create_by", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150" },
+                { "data": "role_id", "sClass": "left", "width": "100", "height": "150" },
+                { "data": "status", "sClass": "left", "width": "100", "height": "150" },
                 {
                     "data": "id",
                     "bSearchable": false,
                     "bSortable": false,
                     "sClass": "text-center",
-                    "width": "100", "height": "150" ,
+                    "width": "200", "height": "150",
                     "mRender": function (data, type, full, meta) {
                         if (full.status)
-                            return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
-                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
-                        return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-pencil" ></i ></button>\
-                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.product_id + '"><i class="fa fa-trash-o"></i></button>\
-                                <button id="btnResetPass" title="Đặt lại mật khẩu" class="btn btn-warning btn-xs" data-id="' + full.product_id + '"><i class="fa fa-undo"></i></button>'
+                            return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.id + '"><i class="fas fa-edit"></i></button>\
+                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.id + '"><i class="fas fa-trash-alt"></i></button>\
+                                <button id="btnChangeStatus"  title="Update Status" class="btn btn-warning btn-xs" data-id="' + full.id + '"><i class="fas fa-undo-alt"></i></button>'
+                        return '<button id="btnEdit" title="Sửa" class="btn btn-primary btn-xs" data-toggle="modal" data-id="' + full.id + '"><i class="fas fa-edit"></i></button>\
+                                <button id="btnDelete" title="Xóa" class="btn btn-danger btn-xs" data-toggle="modal" data-id="' + full.id + '"><i class="fas fa-trash-alt"></i></button>\
+                                <button id="btnChangeStatus" title="Update Status" class="btn btn-danger btn-xs" data-id="' + full.id + '"><i class="fas fa-undo-alt"></i></button>'
                     }
                 }
 
             ],
         buttons: []
     });
-
-    //pTable.one('draw', function () { pTable.columns.adjust(); }).ajax.reload();
+    //$('body').on('search.dt', '.dataTables_filter input', function () {
+    //    setTimeout(function () { pTable.search($('.dataTables_filter input').val()).draw(); }, 10000);
+    //});
 };
+
 
 $(document).ready(function () {
     loadData();
 });
+
 
 $(document).on('click', '#btnAdd', function () {
     $('#serviceModal').modal({ backdrop: 'static', keyboard: false });
@@ -96,7 +103,7 @@ $(document).on('click', '#btnAdd', function () {
 $(document).on('click', '#btnEdit', function () {
     var id = $(this).attr('data-id');
     $('#productManagerModal').modal({ backdrop: 'static', keyboard: false });
-    var apiFind = "http://localhost:6580/api/Product/find/" + id;
+    var apiFind = APP_CONFIG.FindById + id;
     $.ajax({
         url: apiFind,
         type: "get",
@@ -118,31 +125,40 @@ $(document).on('click', '#btnEdit', function () {
 });
 
 $('#btnSaveModalAdd').click(function () {
-    var apiAdd = "http://localhost:6580/api/Product/add";
+    var apiAdd = APP_CONFIG.Add;
+    var input = document.getElementById("files");
+    var files = input.files;
+    var formData = new FormData();
+
+    for (var i = 0; i != files.length; i++) {
+        formData.append("thumbnailImage", files[i]);
+    }
+    formData.append("productName", $('#serviceModal input[name="product_name"]').val());
+    formData.append("price", $('#serviceModal input[name="price"]').val());
+    formData.append("oldPrice", $('#serviceModal input[name="old_price"]').val());
+
     $.ajax({
         url: apiAdd,
         type: "post",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
+        processData: false,
+        contentType: false,
         headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
-        data: JSON.stringify({
-            product_Name: $('#serviceModal input[name="product_name"]').val(),
-            price: $('#serviceModal input[name="price"]').val(),
-            old_Price: $('#serviceModal input[name="old_price"]').val()
-        }),
+        data: formData,
         success: function (data) {
             if (data.success) {
                 iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
                 pTable.ajax.reload();
+
             }
             else
                 iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
         }
     });
 });
+
 $('#btnSaveModalUpdate').click(function () {
     var id = $('#productManagerModal input[name="product_id"]').val();
-    var apiUpdate = "http://localhost:6580/api/Product/update/" + id;
+    var apiUpdate = APP_CONFIG.Update + id;
     $.ajax({
         url: apiUpdate,
         type: "post",
@@ -166,9 +182,31 @@ $('#btnSaveModalUpdate').click(function () {
     });
 });
 
+$(document).on('click', '#btnChangeStatus', function () {
+    $.ajax({
+        url: APP_CONFIG.ChangeStatus,
+        type: "Post",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+        data: JSON.stringify({
+            id: $(this).attr('data-id'),
+        }),
+        success: function (data) {
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Update Trạng Thái thành công' });
+                pTable.ajax.reload();
+            }
+            else
+                iziToast.error({ timeout: 5000, message: 'Update Trạng Thái Thất Bại' });
+        }
+    });
+});
+
 $(document).on('click', '#btnDelete', function () {
     var id = $(this).attr('data-id');
-    var apiDelete = "http://localhost:6580/api/Product/delete/" + id;
+    var apiDelete = APP_CONFIG.Delete + id;
+
     $.ajax({
         url: apiDelete,
         type: "Post",
@@ -183,6 +221,34 @@ $(document).on('click', '#btnDelete', function () {
             }
             else
                 iziToast.error({ timeout: 5000, message: 'Xóa Sản phẩm Thất Bại' });
+        }
+    });
+});
+
+$(document).on('click', '#btnImport', function () {
+    var input = document.getElementById("fileImport");
+    var files = input.files;
+    var formData = new FormData();
+
+    for (var i = 0; i != files.length; i++) {
+        formData.append("file", files[i]);
+    }
+
+    $.ajax({
+        url: APP_CONFIG.Import,
+        type: "post",
+        processData: false,
+        contentType: false,
+        headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
+        data: formData,
+        success: function (data) {
+            if (data.success) {
+                iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
+                pTable.ajax.reload();
+
+            }
+            else
+                iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
         }
     });
 });

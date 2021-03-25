@@ -16,7 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -107,11 +107,18 @@ namespace ServerWebApplication.Controllers
         }
 
         [HttpPost, Route("export")]
-        public async Task<IActionResult> export()
+        public async Task<IActionResult> Export()
         {
             var result = await _productService.Export();
             var export = _exportExcelService.ExportProduct(result);
             return Ok(new ApiOkResponse(export));
+        }
+        [HttpPost, Route("import")]
+        public async Task<IActionResult> Import(IFormFile file)
+        {
+            var import = await _exportExcelService.ImportProduct(file);
+            var addListProduct = await _productService.AddListAsync(import);
+            return Ok(new ApiOkResponse(addListProduct));
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "ProductManager";
+﻿
+@{
+    ViewData["Title"] = "UserManager";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -55,12 +56,14 @@
                         <tr>
                             <th>#</th>
                             <th style="width:150px;height:10px;">ID</th>
-                            <th style="width:200px;height:10px;">Tên Sản Phẩm</th>
+                            <th style="width:200px;height:10px;">Tài Khoản</th>
+                            <th style="width:200px;height:10px;">Họ Và Tên</th>
                             <th>Hình Ảnh</th>
-                            <th style="width:100px;height:10px;">Giá</th>
-                            <th style="width:100px;height:10px;">Giá Cũ</th>
-                            <th style="width:100px;height:10px;">Ngày Tạo</th>
-                            <th style="width:100px;height:10px;">Người Tạo</th>
+                            <th style="width:100px;height:10px;">Số Điện Thoại</th>
+                            <th style="width:100px;height:10px;">Email</th>
+                            <th style="width:100px;height:10px;">Ngày Sinh</th>
+                            <th style="width:100px;height:10px;">Role</th>
+                            <th style="width:100px;height:10px;">Trạng Thái</th>
                             <th style="width:100px;height:10px;">Chức Năng</th>
                         </tr>
                     </thead>
@@ -196,14 +199,13 @@
         <script>
             APP_CONFIG = {
                 BaseURL: decodeURIComponent('@Configuration["BaseAddress"]'),
-                GetAll: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/all",
-                Add: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/add",
-                Update: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/update/",
-                Delete: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/delete/",
-                FindById: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/find/",
-                Search: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/search",
-                ChangeStatus: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/change-status",
-                Import: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Product/import",
+                GetAll: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/all",
+                Add: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/add",
+                Update: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/update/",
+                Delete: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/delete/",
+                FindById: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/find/",
+                ChangeStatus: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/change-status",
+                Import: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/User/import",
                 pageLength: 10
             }
         </script>
@@ -248,5 +250,7 @@
         <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
         <script src="https://momentjs.com/downloads/moment.js"></script>
-        <script src="~/assets/page/ProductList_Manager.js"></script>
+
+
+        <script src="~/assets/page/User_Manager.js"></script>
     }

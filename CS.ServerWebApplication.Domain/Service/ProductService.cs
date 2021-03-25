@@ -34,7 +34,7 @@ namespace CS.Server.Domain.Service
         private readonly IMapper _mapper;
 
         private readonly IStorageService _storageService;
-        private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private const string USER_CONTENT_FOLDER_NAME = "product-content";
 
 
         /// <summary>
@@ -193,11 +193,11 @@ namespace CS.Server.Domain.Service
             var products = _unitOfWork.GetRepository<Product>().GetAll();
             if (!string.IsNullOrEmpty(parameters.Search.Value))
             {
-                 products = _unitOfWork.GetRepository<Product>().GetAll().Where(x=>x.ProductName == parameters.Search.Value);
+                products = _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.ProductName == parameters.Search.Value && x.Status == true);
             }
             else
             {
-                 products = _unitOfWork.GetRepository<Product>().GetAll();
+                products = _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.Status == true);
             }
             var totalRecord = products.Count();
             var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
@@ -260,7 +260,7 @@ namespace CS.Server.Domain.Service
 
         public async Task<ICollection<Product>> GetAllAsync()
         {
-            return await _unitOfWork.GetRepository<Product>().GetAll().ToListAsync();
+            return await _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.Status == true).ToListAsync();
         }
 
         public async Task<Product> ChangeStatus(Guid id)
@@ -288,6 +288,20 @@ namespace CS.Server.Domain.Service
             }
 
             return productViewModels;
+        }
+
+        public async Task<List<Product>> AddListAsync(List<Product> request)
+        {
+            var products = new List<Product>();
+            foreach (var item in request)
+            {
+                var productInfo = _mapper.Map<Product>(item);
+                products.Add(productInfo);
+                _unitOfWork.GetRepository<Product>().Add(productInfo);
+            }
+            await _unitOfWork.CommitAsync();
+
+            return products;
         }
     }
 }

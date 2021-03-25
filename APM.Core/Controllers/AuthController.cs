@@ -32,8 +32,6 @@ namespace APM.Core.Controllers
         [HttpGet, Route("Login")]
         public async Task<IActionResult> Login()
         {
-            //ViewBag.MessageType = "primary";
-            //ViewBag.Message = "Mời Đăng Nhập";
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }

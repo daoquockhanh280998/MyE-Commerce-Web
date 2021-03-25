@@ -67,6 +67,7 @@ namespace ServerWebApplication
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IExportExcelService, ExportExcelService>();
+            services.AddHttpContextAccessor();
             //services.AddTransient<IProductCategoryService, ProductCategoryService>();
             // Automapper
             var mappingConfig = new MapperConfiguration(mc =>

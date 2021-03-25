@@ -16,7 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -32,11 +32,12 @@ namespace ServerWebApplication.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet, Route("all")]
-        public async Task<IActionResult> GetAll()
+
+        [HttpPost, Route("all")]
+        public async Task<IActionResult> GetAllUser([FromBody] DataTableParameters parameters)
         {
-            var response = await _userService.GetAllAsync();
-            return Ok(new ApiOkResponse(response));
+            var result = await _userService.GetAllAsync(parameters);
+            return Ok(result);
         }
 
 
@@ -48,34 +49,15 @@ namespace ServerWebApplication.Controllers
             return Ok(new ApiOkResponse(model));
         }
 
-        //[HttpPost, Route("update/{id}")]
-        //public async Task<IActionResult> UpdateUsers([FromBody] RegisterRequest request, Guid id)
-        //{
-        //    if (!ModelState.IsValid || request == null)
-        //        return BadRequest(new ApiBadRequestResponse(ModelState));
+        [HttpPost, Route("add")]
+        public async Task<IActionResult> Add([FromForm] UserRequest request)
+        {
+            if (!ModelState.IsValid || request == null)
+                return BadRequest(new ApiBadRequestResponse(ModelState));
 
-        //    var model = _mapper.Map<Users>(request);
-        //    var response = await _userService.UpdateAsync(model, id);
-        //    return Ok(new ApiOkResponse(response));
-        //}
+            var result = await _userService.AddAsync(request);
 
-        //[HttpPost, Route("delete/{id}")]
-        //public async Task<IActionResult> DeleteUsersById(Guid id)
-        //{
-        //    if (id == null || id == Guid.Empty)
-        //    {
-        //        return NotFound(new ApiResponse(false, 404, $"Users is not found with id {id}"));
-        //    }
-
-        //    var model = await _userService.GetAsync(id);
-        //    if (model == null)
-        //    {
-        //        return NotFound(new ApiResponse(false, 404, $"Users not found with id {id}"));
-        //    }
-
-        //    await _userService.DeleteAsync(id);
-
-        //    return Ok(new ApiOkResponse(null));
-        //}
+            return Ok(new ApiOkResponse(result));
+        }
     }
 }

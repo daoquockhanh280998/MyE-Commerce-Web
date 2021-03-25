@@ -1,4 +1,5 @@
 ﻿using CS.Core.Service.Interfaces;
+using CS.EF.Models;
 using CS.VM.ProductViewModel;
 using CS.VM.Rerponse;
 using Microsoft.AspNetCore.Http;
@@ -8,10 +9,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CS.Server.Domain.Service
 {
-   public class ExportExcelService : IExportExcelService
+    public class ExportExcelService : IExportExcelService
     {
         private readonly int NUMBER_IGNORE_ROW = 16;
         /// <summary>
@@ -29,7 +31,7 @@ namespace CS.Server.Domain.Service
         public ExportResponse ExportProduct(ICollection<ProductViewModel> Products)
         {
             var webRoot = "wwwroot/";
-            var fileName = "DanhSachSanPham.xlsx";
+            var fileName = "Tekmedi.DanhSachBenhNhan.xlsx";
             var tempPath = @"templates/" + fileName;
             FileInfo tempFile = new FileInfo(Path.Combine(webRoot, tempPath));
             if (!tempFile.Exists) throw new Exception("Không tìm thấy file template");
@@ -76,7 +78,7 @@ namespace CS.Server.Domain.Service
                         detailSheet.Cells["F" + row].Value = i.OldPrice;
                         detailSheet.Cells["G" + row].Value = i.DateCreated.HasValue ? i.DateCreated.Value.ToString("dd/MM/yyyy") : string.Empty;
                         detailSheet.Cells["H" + row].Value = i.CreateBy;
-                        detailSheet.Cells["I" + row].Value = i.Status == true? "Còn Hoạt Động" : "Không Còn Hoạt Động";
+                        detailSheet.Cells["I" + row].Value = i.Status == true ? "Còn Hoạt Động" : "Không Còn Hoạt Động";
                         row++;
                     }
 
@@ -97,6 +99,36 @@ namespace CS.Server.Domain.Service
                 FilePath = filePath,
                 FileName = fileName
             };
+        }
+
+        public async Task<List<Product>> ImportProduct(IFormFile file)
+        {
+            var listProduct = new List<Product>();
+            using (var steam = new MemoryStream())
+            {
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                await file.CopyToAsync(steam);
+                using (var package = new ExcelPackage(steam))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        listProduct.Add(new Product
+                        {
+                            ProductID = Guid.NewGuid(),
+                            ProductName = worksheet.Cells[row, 1].Value.ToString().Trim(),
+                            Price = Convert.ToDecimal(worksheet.Cells[row, 2].Value),
+                            OldPrice = Convert.ToDecimal(worksheet.Cells[row, 3].Value),
+                            DateCreated = DateTime.Now,
+                            CreateBy = worksheet.Cells[row, 5].Value.ToString().Trim(),
+                            Status = true
+                        });
+                    }
+                };
+            };
+
+            return listProduct;
         }
     }
 }
