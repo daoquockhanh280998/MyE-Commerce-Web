@@ -60,13 +60,13 @@
                 },
                 {
                     "data": "old_price", "sClass": "right", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
-                   "mRender": function (data, type, full, meta) {
+                    "mRender": function (data, type, full, meta) {
                         return data.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
                     }
                 },
                 {
                     "data": "date_created", "sClass": "left", "bSearchable": true, "bSortable": true, "width": "100", "height": "150",
-                     "mRender": function (data, type, full, meta) {
+                    "mRender": function (data, type, full, meta) {
                         return moment(data).format('DD-MM-YYYY');
                     }
                 },
@@ -96,11 +96,9 @@
     //});
 };
 
-
 $(document).ready(function () {
     loadData();
 });
-
 
 $(document).on('click', '#btnAdd', function () {
     $('#serviceModal').modal({ backdrop: 'static', keyboard: false });
@@ -155,7 +153,6 @@ $('#btnSaveModalAdd').click(function () {
             if (data.success) {
                 iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
                 pTable.ajax.reload();
-
             }
             else
                 iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });
@@ -166,25 +163,31 @@ $('#btnSaveModalAdd').click(function () {
 $('#btnSaveModalUpdate').click(function () {
     var id = $('#productManagerModal input[name="product_id"]').val();
     var apiUpdate = APP_CONFIG.Update + id;
+    var input = document.getElementById("updateFiles");
+    var files = input.files;
+    var formData = new FormData();
+
+    for (var i = 0; i != files.length; i++) {
+        formData.append("ThumbnailImage", files[i]);
+    }
+    formData.append("productName", $('#productManagerModal input[name="product_name"]').val());
+    formData.append("price", $('#productManagerModal input[name="price"]').val());
+    formData.append("oldPrice", $('#productManagerModal input[name="old_price"]').val());
+    formData.append("status", $('#productManagerModal input[name="is_status"]').val());
     $.ajax({
         url: apiUpdate,
         type: "post",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
+        processData: false,
+        contentType: false,
         headers: { "Authorization": "Bearer " + localStorage.getItem('token') },
-        data: JSON.stringify({
-            product_id: $('#productManagerModal input[name="product_id"]').val(),
-            product_Name: $('#productManagerModal input[name="product_name"]').val(),
-            price: $('#productManagerModal input[name="price"]').val(),
-            old_Price: $('#productManagerModal input[name="old_price"]').val()
-        }),
+        data: formData,
         success: function (data) {
             if (data.success) {
-                iziToast.success({ timeout: 5000, message: 'Update thành công' });
+                iziToast.success({ timeout: 5000, message: 'Update sản phẩm thành công' });
                 pTable.ajax.reload();
             }
             else
-                iziToast.error({ timeout: 5000, message: 'Update thất bại' });
+                iziToast.error({ timeout: 5000, message: 'Update sản phẩm thất bại' });
         }
     });
 });
@@ -201,7 +204,7 @@ $(document).on('click', '#btnChangeStatus', function () {
         }),
         success: function (data) {
             if (data.success) {
-                iziToast.success({ timeout: 5000, message: 'Update Trạng Thái thành công' }); 
+                iziToast.success({ timeout: 5000, message: 'Update Trạng Thái thành công' });
                 pTable.ajax.reload();
             }
             else
@@ -252,7 +255,6 @@ $(document).on('click', '#btnImport', function () {
             if (data.success) {
                 iziToast.success({ timeout: 5000, message: 'Thêm Sản Phẩm Thành Công' });
                 pTable.ajax.reload();
-
             }
             else
                 iziToast.error({ timeout: 5000, message: 'Thêm Sản Phẩm Thất Bại' });

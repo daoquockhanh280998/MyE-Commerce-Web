@@ -16,11 +16,12 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         private readonly IExportExcelService _exportExcelService;
+
         /// <summary>
         /// The mapper
         /// </summary>
@@ -67,13 +68,11 @@ namespace ServerWebApplication.Controllers
         }
 
         [HttpPost, Route("update/{id}")]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductRequest request, Guid id)
+        public async Task<IActionResult> UpdateProduct([FromForm] ProductRequest request, Guid id)
         {
             if (!ModelState.IsValid || request == null)
                 return BadRequest(new ApiBadRequestResponse(ModelState));
-
-            var model = _mapper.Map<Product>(request);
-            var response = await _productService.UpdateAsync(model, id);
+            var response = await _productService.UpdateProductAsync(request, id);
             return Ok(new ApiOkResponse(response));
         }
 
@@ -113,6 +112,7 @@ namespace ServerWebApplication.Controllers
             var export = _exportExcelService.ExportProduct(result);
             return Ok(new ApiOkResponse(export));
         }
+
         [HttpPost, Route("import")]
         public async Task<IActionResult> Import(IFormFile file)
         {

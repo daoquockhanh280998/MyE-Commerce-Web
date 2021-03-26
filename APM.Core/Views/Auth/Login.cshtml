@@ -1,7 +1,8 @@
 ﻿@{
     Layout = null;
 }
-
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 <!DOCTYPE html>
 <html lang="en">
 
@@ -106,9 +107,11 @@
     <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
-
     <script>
+        debugger;
+           APP_CONFIG = {
+                BaseURL: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Auth/Login",
+            }
         function loginTEM() {
             event.preventDefault();
             let params = {
@@ -116,7 +119,7 @@
                 "Password": $("#password").val(),
             };
             $.ajax({
-                url: 'http://192.168.1.38:8082/api/Auth/Login',
+                url: APP_CONFIG.BaseURL,
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 datatype: JSON,

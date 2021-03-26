@@ -32,6 +32,7 @@ namespace CS.EF.Models
 
         [Column("role_id")]
         public Guid RoleId { get; set; }
+
         [Column("status")]
         public bool Status { get; set; }
 

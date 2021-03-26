@@ -31,5 +31,11 @@ namespace CS.EF.Models
 
         [Column("status")]
         public bool Status { set; get; }
+
+        [Column("update_date")]
+        public DateTime UpdateDate { set; get; } = DateTime.Now;
+
+        [Column("update_by")]
+        public string UpdateBy { set; get; }
     }
 }

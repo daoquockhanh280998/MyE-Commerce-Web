@@ -10,7 +10,7 @@ namespace CS.Common.StorageService
     {
         string GetFileUrl(string fileName);
 
-        Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
+        Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string folderName);
 
         Task DeleteFileAsync(string fileName);
     }

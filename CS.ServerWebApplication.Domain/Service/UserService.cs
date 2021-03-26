@@ -26,9 +26,8 @@ namespace CS.Server.Domain.Service
 {
     public class UserService : IUserService
     {
-
         private readonly IStorageService _storageService;
-        private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private const string FOLDER_NAME = "user-content";
 
         /// <summary>
         /// The unit of work
@@ -228,7 +227,6 @@ namespace CS.Server.Domain.Service
                 PhoneNumber = request.PhoneNumber,
                 Status = true,
                 RoleId = request.RoleId
-
             };
 
             if (request.ThumbnailImage != null)
@@ -241,12 +239,13 @@ namespace CS.Server.Domain.Service
 
             return user;
         }
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName, FOLDER_NAME);
+            return "/" + FOLDER_NAME + "/" + fileName;
         }
     }
 }

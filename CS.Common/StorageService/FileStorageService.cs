@@ -11,9 +11,11 @@ namespace CS.Common.StorageService
     {
         private readonly string _userContentFolder;
         private const string USER_CONTENT_FOLDER_NAME = "user-content";
+        private IWebHostEnvironment _webHostEnvironment;
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
+            _webHostEnvironment = webHostEnvironment;
             _userContentFolder = Path.Combine(webHostEnvironment.WebRootPath, USER_CONTENT_FOLDER_NAME);
         }
 
@@ -22,9 +24,10 @@ namespace CS.Common.StorageService
             return $"/{USER_CONTENT_FOLDER_NAME}/{fileName}";
         }
 
-        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
+        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string Product_CONTENT_FOLDER_NAME)
         {
-            var filePath = Path.Combine(_userContentFolder, fileName);
+            var u = Path.Combine(_webHostEnvironment.WebRootPath, Product_CONTENT_FOLDER_NAME);
+            var filePath = Path.Combine(u, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }

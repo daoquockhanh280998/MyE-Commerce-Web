@@ -34,13 +34,8 @@ namespace CS.Server.Domain.Service
         private readonly IMapper _mapper;
 
         private readonly IStorageService _storageService;
-        private const string USER_CONTENT_FOLDER_NAME = "product-content";
+        private const string FOLDER_NAME = "product-content";
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PatientService" /> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
         public ProductService(IUnitOfWork unitOfWork,
             IMapper mapper, IStorageService storageService)
         {
@@ -78,7 +73,6 @@ namespace CS.Server.Domain.Service
                 _unitOfWork.GetRepository<Product>().Update(product);
             }
 
-
             await _unitOfWork.CommitAsync();
 
             return product;
@@ -106,8 +100,8 @@ namespace CS.Server.Domain.Service
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName, FOLDER_NAME);
+            return "/" + FOLDER_NAME + "/" + fileName;
         }
 
         public async Task<Product> AddAsync(Product entity)
@@ -241,7 +235,7 @@ namespace CS.Server.Domain.Service
             return existing;
         }
 
-        public async Task<Product> UpdateAsync(Product updated, Guid id)
+        public async Task<Product> UpdateProductAsync(ProductRequest updated, Guid id)
         {
             if (updated == null)
                 return null;
@@ -252,6 +246,13 @@ namespace CS.Server.Domain.Service
                 existing.ProductName = updated.ProductName;
                 existing.Price = updated.Price;
                 existing.OldPrice = updated.OldPrice;
+                if (updated.ThumbnailImage != null)
+                {
+                    existing.ImagePath = await this.SaveFile(updated.ThumbnailImage);
+                }
+                existing.UpdateDate = DateTime.Now;
+                existing.Status = true;
+                existing.UpdateBy = "Admin1";
                 _unitOfWork.GetRepository<Product>().Update(existing);
                 await _unitOfWork.CommitAsync();
             }
@@ -302,6 +303,11 @@ namespace CS.Server.Domain.Service
             await _unitOfWork.CommitAsync();
 
             return products;
+        }
+
+        public Task<Product> UpdateAsync(Product updated, Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

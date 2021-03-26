@@ -14,6 +14,7 @@ namespace CS.Core.Service.Interfaces
     public interface IProductService : IService<Product, IRepository<Product>>
     {
         Task<Product> AddAsync(ProductRequest request);
+
         Task<List<Product>> AddListAsync(List<Product> request);
 
         PageResult<Product> GetAllPagging(PaggingRequest request);
@@ -23,5 +24,7 @@ namespace CS.Core.Service.Interfaces
         Task<Product> ChangeStatus(Guid id);
 
         Task<ICollection<ProductViewModel>> Export();
+
+        Task<Product> UpdateProductAsync(ProductRequest updated, Guid id);
     }
 }

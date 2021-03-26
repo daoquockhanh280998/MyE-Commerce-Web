@@ -168,7 +168,13 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label class="checkbox-inline"><input type="checkbox" name="is_active" checked>  Hoạt động</label>
+                                <div class="form-group">
+                                    <label>Thêm Ảnh</label>
+                                    <input id="updateFiles" name="updateFiles" type="file" size="1" multiple onchange="uploadFiles('updateFiles');" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="checkbox-inline"><input type="checkbox" name="is_status" id="is_status" checked>  Hoạt động</label>
                             </div>
                         </div>
                     </div>
