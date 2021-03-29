@@ -18,7 +18,7 @@ namespace CS.VM.Request
         public string CreateBy { set; get; }
 
         public IFormFile ThumbnailImage { get; set; }
-        public bool Status { get; set; }
+       // public bool Status { get; set; }
         public DateTime? UpdateDate { set; get; }
         public string UpdateBy { set; get; }
     }

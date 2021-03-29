@@ -16,7 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-  //  [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

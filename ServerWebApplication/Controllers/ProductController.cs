@@ -16,7 +16,7 @@ namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize]
+   // [Authorize(Roles ="SuperAdmin,Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -96,7 +96,7 @@ namespace ServerWebApplication.Controllers
         }
 
         [HttpPost, Route("change-status")]
-        public async Task<IActionResult> ChangeActive([FromBody] ChangeStatusRequest request)
+        public async Task<IActionResult> ChangeStatus([FromBody] ChangeStatusRequest request)
         {
             Product response;
             if (!ModelState.IsValid)

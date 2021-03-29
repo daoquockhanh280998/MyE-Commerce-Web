@@ -185,13 +185,13 @@ namespace CS.Server.Domain.Service
             var data = new ConcurrentBag<ProductViewModel>();
             var result = new TableResultJsonResponse<ProductViewModel>();
             var products = _unitOfWork.GetRepository<Product>().GetAll();
-            if (!string.IsNullOrEmpty(parameters.Search.Value))
+            if (!string.IsNullOrEmpty(parameters.Search.Value) || parameters.Search.Value == "string")
             {
-                products = _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.ProductName == parameters.Search.Value && x.Status == true);
+                products = _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.ProductName == parameters.Search.Value );
             }
             else
             {
-                products = _unitOfWork.GetRepository<Product>().GetAll().Where(x => x.Status == true);
+                products = _unitOfWork.GetRepository<Product>().GetAll();
             }
             var totalRecord = products.Count();
             var filteredProducts = await products.Skip(parameters.Start).Take(parameters.Length).ToListAsync();
@@ -251,7 +251,6 @@ namespace CS.Server.Domain.Service
                     existing.ImagePath = await this.SaveFile(updated.ThumbnailImage);
                 }
                 existing.UpdateDate = DateTime.Now;
-                existing.Status = true;
                 existing.UpdateBy = "Admin1";
                 _unitOfWork.GetRepository<Product>().Update(existing);
                 await _unitOfWork.CommitAsync();

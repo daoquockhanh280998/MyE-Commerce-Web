@@ -137,6 +137,19 @@ namespace ServerWebApplication
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
                 };
             });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("SuperAdmin",
+            //        authBuilder =>
+            //        {
+            //            authBuilder.RequireRole("SuperAdmin");
+            //        });
+            //    options.AddPolicy("Admin",
+            //        authBuilder =>
+            //        {
+            //            authBuilder.RequireRole("admin");
+            //        });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
