@@ -7,7 +7,6 @@ using CS.Server.Domain.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +17,7 @@ using Newtonsoft.Json.Serialization;
 using ServerWebApplication.AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ServerWebApplication
 {
@@ -67,6 +65,8 @@ namespace ServerWebApplication
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IExportExcelService, ExportExcelService>();
+            services.AddTransient<IProductCategoryService, ProductCategoryService>();
+            services.AddTransient<IProductMainCategoryService, ProductMainCategoryService>();
             services.AddHttpContextAccessor();
             //services.AddTransient<IProductCategoryService, ProductCategoryService>();
             // Automapper
@@ -170,8 +170,24 @@ namespace ServerWebApplication
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseCookiePolicy();
 
+            ////Add User session
+            //app.UseSession();
+
+            ////Add JWToken to all incoming HTTP Request Header
+            //app.Use(async (context, next) =>
+            //{
+            //    var JWToken = context.Session.GetString("JWToken");
+            //    if (!string.IsNullOrEmpty(JWToken))
+            //    {
+            //        context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+            //    }
+            //    await next();
+            //});
+            //Add JWToken Authentication service
             app.UseAuthentication();
+
             app.UseRouting();
             app.UseAuthorization();
             app.UseStaticFiles();

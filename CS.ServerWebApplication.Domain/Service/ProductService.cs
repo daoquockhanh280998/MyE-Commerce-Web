@@ -59,7 +59,7 @@ namespace CS.Server.Domain.Service
                 ProductName = request.ProductName,
                 Price = request.Price,
                 OldPrice = request.OldPrice,
-                CreateBy = "Admin",
+                CreateBy = request.CreateBy,
                 DateCreated = DateTime.Now,
                 Status = true
             };

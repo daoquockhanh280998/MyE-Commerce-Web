@@ -5,23 +5,17 @@ using System.Text;
 
 namespace CS.EF.Models
 {
-    [Table("product_category", Schema = "IHM")]
-    public class ProductCategory
+    [Table("product_main_category", Schema = "IHM")]
+    public class ProductMainCategory
     {
-        [Column("product_category_id")]
+        [Column("product_main_category_id")]
         public Guid Id { set; get; }
 
-        [Column("product_category_name")]
-        public string ProductCategoryName { get; set; }
+        [Column("product_main_category_name")]
+        public string ProductMainCategoryName { get; set; }
 
         [Column("sort_order")]
         public int SortOrder { set; get; }
-
-        [Column("is_show_on_home")]
-        public bool IsShowOnHome { set; get; }
-
-        [Column("product_main_category_id")]
-        public Guid ProductMainCategoryId { set; get; }
 
         [Column("status")]
         public bool Status { set; get; }

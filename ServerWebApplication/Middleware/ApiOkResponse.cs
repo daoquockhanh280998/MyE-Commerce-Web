@@ -1,10 +1,6 @@
 ﻿using ServerWebApplication.Middleware;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BackEndAPI.Middleware
+namespace ServerWebApplication.Middleware
 {
     /// <summary>
     /// Class ApiOkResponse.

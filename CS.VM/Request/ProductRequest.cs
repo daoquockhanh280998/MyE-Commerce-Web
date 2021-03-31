@@ -13,13 +13,14 @@ namespace CS.VM.Request
 
         public int OldPrice { get; set; }
 
-        public DateTime? DateCreated { set; get; }
+        public DateTime? CreatedDate { set; get; }
 
-        public string CreateBy { set; get; }
+        public string CreateBy { get; set; }
 
         public IFormFile ThumbnailImage { get; set; }
        // public bool Status { get; set; }
         public DateTime? UpdateDate { set; get; }
         public string UpdateBy { set; get; }
+
     }
 }

@@ -369,7 +369,7 @@
 
     <div class="modal fade" tabindex="-1" role="dialog" id="loading-modal">
         <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-            <img src="~/assets/img/loading.svg" />
+            <img src="~/img/loading.svg" />
         </div>
     </div>
 
@@ -411,6 +411,11 @@
                     $('#loading-modal').modal('hide');
                 }, 2000);
             });
+        });
+
+        $(".nav-link.dropdown-toggle").click(function () {
+            var id = $(this).attr("id");
+            $("[aria-labelledby='" + id + "']").toggleClass("show");
         });
     </script>
 </body>

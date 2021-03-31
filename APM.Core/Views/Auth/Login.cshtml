@@ -94,7 +94,7 @@
 
     <div class="modal fade" tabindex="-1" role="dialog" id="loading-modal">
         <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-            <img src="~/assets/img/loading.svg" />
+            <img src="~/img/loading.svg" />
         </div>
     </div>
 
@@ -108,11 +108,12 @@
 
     <!-- Custom scripts for all pages-->
     <script>
-        debugger;
+      
            APP_CONFIG = {
                 BaseURL: decodeURIComponent('@Configuration["BaseAddress"]') + "/api/Auth/Login",
             }
         function loginTEM() {
+            debugger;
             event.preventDefault();
             let params = {
                 "user_name": $("#userName").val(),
@@ -126,18 +127,18 @@
                 data: JSON.stringify(params),
                 success: function (data) {
                     if (data.success == true) {
-                            $.ajax({
-                                url: "/CookieAuthentication",
-                                method: "post",
-                                datatype: JSON,
-                                data: {
-                                    token: data.result,
-                                },
-                                success: function (data) {
-                                    localStorage.setItem('token', data.result);
-                                    location.href = "@Url.Action("Index", "Home")";
-                                }
-                            })
+                        $.ajax({
+                            url: "/CookieAuthentication",
+                            method: "post",
+                            datatype: JSON,
+                            data: {
+                                token: data.result,
+                            },
+                            success: function (data) {
+                                localStorage.setItem('token', data.result);
+                                location.href = "@Url.Action("Index", "Home")";
+                            }
+                        });
                     } else if (data.success == false) {
                         swal({
                             text: data.result.errors,
@@ -153,7 +154,9 @@
                     $('#loading-modal').modal('hide');
                 }
             });
+
         }
+
     </script>
 </body>
 </html>

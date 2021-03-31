@@ -47,7 +47,7 @@ namespace APM.Core.Controllers
             };
 
             HttpContext.Session.SetString("Token", token);
-           // HttpContext.Session.SetString("userName", User.Identity.Name);
+            // HttpContext.Session.SetString("userName", User.Identity.Name);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, authProperties);
 
@@ -79,6 +79,12 @@ namespace APM.Core.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
             return principal;
+        }
+        [HttpGet, Route("GetUserName")]
+        public  IActionResult GetUserName()
+        {
+            var name = User.Identity.Name;
+            return Json(name);
         }
     }
 }

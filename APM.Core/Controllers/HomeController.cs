@@ -24,5 +24,12 @@ namespace APM.Core.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult GetUserName()
+        {
+            var name = User.Identity.Name;
+            return Json(name);
+        }
     }
 }

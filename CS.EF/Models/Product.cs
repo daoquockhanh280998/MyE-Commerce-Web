@@ -37,5 +37,11 @@ namespace CS.EF.Models
 
         [Column("update_by")]
         public string UpdateBy { set; get; }
+
+        [Column("product_category_id")]
+        public Guid ProductCategoryID { get; set; }
+
+        [Column("product_main_category_id")]
+        public Guid ProductMainCategoryID { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BackEndAPI.Middleware;
 using CS.Core.Service.Interfaces;
 using CS.EF.Models;
 using CS.VM.Request;
@@ -8,15 +7,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerWebApplication.Middleware;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServerWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize(Roles ="SuperAdmin,Admin")]
+    [Authorize(Roles ="SuperAdmin,Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -51,9 +48,10 @@ namespace ServerWebApplication.Controllers
         [HttpPost, Route("add")]
         public async Task<IActionResult> Add([FromForm] ProductRequest request)
         {
+           
             if (!ModelState.IsValid || request == null)
                 return BadRequest(new ApiBadRequestResponse(ModelState));
-
+            request.CreateBy =  User.Identity.Name;
             var result = await _productService.AddAsync(request);
 
             return Ok(new ApiOkResponse(result));
@@ -72,6 +70,8 @@ namespace ServerWebApplication.Controllers
         {
             if (!ModelState.IsValid || request == null)
                 return BadRequest(new ApiBadRequestResponse(ModelState));
+            var u = User.Identity.Name + "123456789";
+            request.CreateBy = u;
             var response = await _productService.UpdateProductAsync(request, id);
             return Ok(new ApiOkResponse(response));
         }

@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using BackEndAPI.Middleware;
 using CS.Core.Service.Interfaces;
 using CS.EF.Models;
 using CS.VM.Request;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerWebApplication.Middleware;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServerWebApplication.Controllers

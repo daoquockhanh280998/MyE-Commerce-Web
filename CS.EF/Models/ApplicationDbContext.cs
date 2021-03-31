@@ -11,6 +11,7 @@ namespace CS.EF.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductMainCategory> ProductMainCategories { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
